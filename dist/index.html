@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bioblanks Quote Calculator - Demo</title>
+    <meta name="description" content="Interactive pricing calculator for custom apparel - TypeScript micro-frontend demo">
+    <style>
+        body { 
+            margin: 0; 
+            padding: 20px; 
+            font-family: system-ui, sans-serif; 
+            background: #f8fafc;
+        }
+        .demo-header {
+            text-align: center;
+            margin-bottom: 32px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .demo-header h1 {
+            margin: 0 0 8px 0;
+            color: #1f2937;
+            font-size: 24px;
+        }
+        .demo-header p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        .demo-links {
+            margin-top: 16px;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .demo-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: #3b82f6;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .demo-links a:hover {
+            background: #2563eb;
+        }
+        .demo-links a.secondary {
+            background: #6b7280;
+        }
+        .demo-links a.secondary:hover {
+            background: #4b5563;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-header">
+        <h1>🧮 Bioblanks Quote Calculator</h1>
+        <p>Interactive pricing calculator with real-time quotes and delivery estimates</p>
+        <div class="demo-links">
+            <a href="https://github.com/Bioblanks-accounts/bioblanks-quote-calculator" target="_blank">
+                📚 View on GitHub
+            </a>
+            <a href="https://github.com/Bioblanks-accounts/bioblanks-quote-calculator/blob/main/README.md" target="_blank" class="secondary">
+                📖 Documentation
+            </a>
+        </div>
+    </div>
+
+    <!-- Bioblanks Quote Calculator -->
+    <div id="quote-calc" data-form-id="">
+        <style>
+            /* CSS Variables for theming */
+            #quote-calc {
+                --rc-font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+                --rc-bg: #f4f5f6;
+                --rc-card: #ffffff;
+                --rc-text: #0f172a;
+                --rc-muted: #64748b;
+                --rc-accent: #111827;
+                --rc-primary: #3b82f6;
+                --rc-border: #e2e8f0;
+                --rc-radius: 12px;
+                --rc-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+
+            /* Main container */
+            #quote-calc {
+                font-family: var(--rc-font);
+                max-width: 800px;
+                margin: 0 auto;
+                background: var(--rc-card);
+                border-radius: var(--rc-radius);
+                box-shadow: var(--rc-shadow);
+                overflow: hidden;
+            }
+
+            /* Grid layout */
+            #quote-calc .rc-grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            /* Sections */
+            #quote-calc .rc-section {
+                padding: 32px;
+                border-bottom: 1px solid var(--rc-border);
+            }
+
+            #quote-calc .rc-section:last-child {
+                border-bottom: none;
+            }
+
+            #quote-calc .rc-section h2 {
+                margin: 0 0 24px 0;
+                font-size: 20px;
+                font-weight: 600;
+                color: var(--rc-accent);
+            }
+
+            /* Product selection */
+            #quote-calc .rc-product-grid {
+                display: grid;
+                gap: 16px;
+            }
+
+            #quote-calc .rc-product-card {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                padding: 20px;
+                border: 2px solid var(--rc-border);
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                background: var(--rc-card);
+            }
+
+            #quote-calc .rc-product-card:hover,
+            #quote-calc .rc-product-card.selected {
+                border-color: var(--rc-primary);
+                background: #f8faff;
+            }
+
+            #quote-calc .rc-product-image {
+                width: 64px;
+                height: 64px;
+                object-fit: cover;
+                border-radius: 6px;
+                background: #f1f5f9;
+            }
+
+            #quote-calc .rc-product-info h3 {
+                margin: 0 0 4px 0;
+                font-size: 16px;
+                font-weight: 600;
+                color: var(--rc-accent);
+            }
+
+            #quote-calc .rc-product-info p {
+                margin: 0;
+                font-size: 14px;
+                color: var(--rc-muted);
+                line-height: 1.4;
+            }
+
+            /* Form controls */
+            #quote-calc .rc-form-group {
+                margin-bottom: 20px;
+            }
+
+            #quote-calc .rc-form-group:last-child {
+                margin-bottom: 0;
+            }
+
+            #quote-calc .rc-form-group label {
+                display: block;
+                margin-bottom: 8px;
+                font-size: 14px;
+                font-weight: 500;
+                color: var(--rc-accent);
+            }
+
+            #quote-calc .rc-select,
+            #quote-calc .rc-qty-input {
+                width: 100%;
+                padding: 12px 16px;
+                border: 1px solid var(--rc-border);
+                border-radius: 6px;
+                font-size: 16px;
+                background: var(--rc-card);
+                color: var(--rc-text);
+                transition: border-color 0.2s ease;
+            }
+
+            #quote-calc .rc-select:focus,
+            #quote-calc .rc-qty-input:focus {
+                outline: none;
+                border-color: var(--rc-primary);
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            }
+
+            /* Quantity controls */
+            #quote-calc .rc-qty-controls {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin-bottom: 24px;
+            }
+
+            #quote-calc .rc-qty-btn {
+                width: 40px;
+                height: 40px;
+                border: 1px solid var(--rc-border);
+                border-radius: 6px;
+                background: var(--rc-card);
+                color: var(--rc-text);
+                font-size: 18px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            #quote-calc .rc-qty-btn:hover {
+                border-color: var(--rc-primary);
+                background: #f8faff;
+            }
+
+            #quote-calc .rc-qty-btn:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+            #quote-calc .rc-qty-input {
+                flex: 1;
+                text-align: center;
+                max-width: 120px;
+            }
+
+            /* Metrics */
+            #quote-calc .rc-metrics {
+                display: grid;
+                gap: 24px;
+                align-items: end;
+                margin-top: 28px;
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            }
+
+            @media (min-width: 1024px) {
+                #quote-calc .rc-metrics {
+                    grid-template-columns: repeat(5, minmax(120px, 1fr));
+                    gap: 16px;
+                }
+                #quote-calc .rc-metric label {
+                    font-size: 11px;
+                    line-height: 1.2;
+                }
+                #quote-calc .rc-metric .rc-big {
+                    font-size: 20px;
+                    line-height: 1.15;
+                    font-weight: 700;
+                }
+                #quote-calc .rc-qty-input {
+                    max-width: 110px;
+                    height: 36px;
+                    font-size: 16px;
+                    padding: 0 10px;
+                }
+            }
+
+            #quote-calc .rc-metric {
+                text-align: center;
+            }
+
+            #quote-calc .rc-metric label {
+                display: block;
+                font-size: 12px;
+                font-weight: 500;
+                color: var(--rc-muted);
+                margin-bottom: 4px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            #quote-calc .rc-big {
+                font-size: 24px;
+                font-weight: 700;
+                color: var(--rc-accent);
+                line-height: 1.2;
+            }
+
+            /* Actions */
+            #quote-calc .rc-actions {
+                display: flex;
+                gap: 12px;
+                margin-top: 32px;
+                flex-wrap: wrap;
+            }
+
+            #quote-calc .rc-btn {
+                flex: 1;
+                min-width: 140px;
+                padding: 14px 24px;
+                border: none;
+                border-radius: 6px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            #quote-calc .rc-btn-primary {
+                background: var(--rc-primary);
+                color: white;
+            }
+
+            #quote-calc .rc-btn-primary:hover {
+                background: #2563eb;
+                transform: translateY(-1px);
+            }
+
+            #quote-calc .rc-btn-secondary {
+                background: var(--rc-card);
+                color: var(--rc-accent);
+                border: 1px solid var(--rc-border);
+            }
+
+            #quote-calc .rc-btn-secondary:hover {
+                background: #f8fafc;
+                border-color: var(--rc-primary);
+            }
+
+            /* Disclaimer */
+            #quote-calc .rc-disclaimer {
+                margin-top: 24px;
+                padding: 16px;
+                background: #f8fafc;
+                border-radius: 6px;
+                font-size: 13px;
+                color: var(--rc-muted);
+                line-height: 1.4;
+            }
+
+            /* Hidden elements */
+            #quote-calc .rc-hidden {
+                display: none;
+            }
+
+            /* Responsive */
+            @media (max-width: 640px) {
+                #quote-calc .rc-section {
+                    padding: 24px 20px;
+                }
+                
+                #quote-calc .rc-actions {
+                    flex-direction: column;
+                }
+                
+                #quote-calc .rc-btn {
+                    min-width: 100%;
+                }
+            }
+        </style>
+
+        <div class="rc-grid" aria-live="polite" aria-relevant="all">
+            <section class="rc-section">
+                <h2>Choose product</h2>
+                <div class="rc-product-grid" id="product-list">
+                    <!-- Products will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <section class="rc-section">
+                <h2>Add Customizations</h2>
+                
+                <div class="rc-form-group">
+                    <label for="color-select">Garment Color</label>
+                    <select id="color-select" class="rc-select" aria-label="Select garment color">
+                        <!-- Options populated by JavaScript -->
+                    </select>
+                </div>
+
+                <div class="rc-form-group">
+                    <label for="artwork-select">Artwork</label>
+                    <select id="artwork-select" class="rc-select" aria-label="Select artwork option">
+                        <!-- Options populated by JavaScript -->
+                    </select>
+                </div>
+
+                <div class="rc-form-group">
+                    <label for="neck-label-select">Neck Label</label>
+                    <select id="neck-label-select" class="rc-select" aria-label="Select neck label option">
+                        <!-- Options populated by JavaScript -->
+                    </select>
+                </div>
+            </section>
+
+            <section class="rc-section">
+                <h2>Order Quantity</h2>
+                
+                <div class="rc-qty-controls">
+                    <button type="button" id="qty-decrease" class="rc-qty-btn" aria-label="Decrease quantity">-</button>
+                    <input 
+                        id="qty-input" 
+                        class="rc-qty-input" 
+                        type="number" 
+                        inputmode="numeric" 
+                        min="1" 
+                        step="1" 
+                        value="1" 
+                        aria-label="Quantity"
+                    />
+                    <button type="button" id="qty-increase" class="rc-qty-btn" aria-label="Increase quantity">+</button>
+                </div>
+
+                <div class="rc-metrics">
+                    <div class="rc-metric">
+                        <label>Lead time</label>
+                        <div class="rc-big" id="lead-time-value">—</div>
+                    </div>
+                    <div class="rc-metric">
+                        <label>Estimated delivery</label>
+                        <div class="rc-big" id="delivery-date-value">—</div>
+                    </div>
+                    <div class="rc-metric">
+                        <label>Quantity</label>
+                        <div class="rc-big" id="quantity-display">1</div>
+                    </div>
+                    <div class="rc-metric">
+                        <label>Unit cost</label>
+                        <div class="rc-big" id="unit-cost-value">—</div>
+                    </div>
+                    <div class="rc-metric">
+                        <label>Subtotal</label>
+                        <div class="rc-big" id="subtotal-value">—</div>
+                    </div>
+                </div>
+
+                <div class="rc-actions">
+                    <button type="button" id="send-email-btn" class="rc-btn rc-btn-primary">
+                        📧 Send to email
+                    </button>
+                    <a href="#" id="start-design-btn" class="rc-btn rc-btn-secondary">
+                        🎨 Start designing
+                    </a>
+                </div>
+
+                <div class="rc-disclaimer">
+                    <strong>Note:</strong> Prices are estimates and may vary based on final specifications. 
+                    Lead times exclude weekends and holidays. Final quote will be provided upon order confirmation.
+                </div>
+            </section>
+        </div>
+
+        <!-- Hidden form for Webflow integration -->
+        <form id="quote-form" class="rc-hidden">
+            <input type="hidden" name="product_id" />
+            <input type="hidden" name="product_name" />
+            <input type="hidden" name="options_json" />
+            <input type="hidden" name="quantity" />
+            <input type="hidden" name="unit_cost" />
+            <input type="hidden" name="subtotal" />
+            <input type="hidden" name="lead_time_days" />
+            <input type="hidden" name="currency" />
+            <input type="hidden" name="estimated_delivery_date" />
+        </form>
+    </div>
+
+    <!-- Load the calculator -->
+    <script type="module" src="./quote-calc.v1.js"></script>
+</body>
+</html>
