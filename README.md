@@ -20,12 +20,12 @@ This calculator was refactored from a monolithic HTML embed to a modular TypeScr
 ## 🚀 Live Demo
 
 - **[Online Demo](https://bioblanks-accounts.github.io/bioblanks-quote-calculator/)** - Development version
-- **[Webflow Production](https://your-site.webflow.io/)** - Integrated version
+
 
 ## 📋 Features
 
 ### 🛍️ Products & Customizations
-- Dynamic product dropdown (Hoodie, Cap, T-Shirt)
+- Dynamic product dropdown (Hoodies & Crewnecks, Tees and Sweatpants & Bottoms)
 - Color selection with differentiated pricing
 - Artwork options (screen printing, embroidery)
 - Custom neck labels
