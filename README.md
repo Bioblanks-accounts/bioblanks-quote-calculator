@@ -1,161 +1,161 @@
 # 🧮 Bioblanks Quote Calculator
 
-> Calculadora de preços modular e interativa para Webflow - Refatorada de embed para micro-frontend TypeScript
+> Modular and interactive pricing calculator for Webflow - Refactored from embed to TypeScript micro-frontend
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)]() 
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)]() 
 [![Webflow](https://img.shields.io/badge/Webflow-4353FF?logo=webflow&logoColor=white)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)]()
 
-## 🎯 Visão Geral
+## 🎯 Overview
 
-Esta calculadora foi refatorada de um embed HTML monolítico para uma arquitetura modular em TypeScript, mantendo **100% da funcionalidade e visual originais** enquanto adiciona:
+This calculator was refactored from a monolithic HTML embed to a modular TypeScript architecture, maintaining **100% of the original functionality and visual design** while adding:
 
-- ✅ **Engine de preços isolada** e testável
-- ✅ **Web Components** que se conectam ao HTML existente  
-- ✅ **Bundle único** (3.72 kB) pronto para Webflow
-- ✅ **Eventos customizados** para integração avançada
-- ✅ **Dados mock** para desenvolvimento independente
+- ✅ **Isolated pricing engine** and testable
+- ✅ **Web Components** that connect to existing HTML  
+- ✅ **Single bundle** (3.72 kB) ready for Webflow
+- ✅ **Custom events** for advanced integration
+- ✅ **Mock data** for independent development
 
-## 🚀 Demo ao Vivo
+## 🚀 Live Demo
 
-- **[Demo Online](https://bioblanks-accounts.github.io/bioblanks-quote-calculator/)** - Versão de desenvolvimento
-- **[Webflow Production](https://seu-site.webflow.io/)** - Versão integrada
+- **[Online Demo](https://bioblanks-accounts.github.io/bioblanks-quote-calculator/)** - Development version
+- **[Webflow Production](https://your-site.webflow.io/)** - Integrated version
 
-## 📋 Funcionalidades
+## 📋 Features
 
-### 🛍️ Produtos & Customizações
-- Dropdown dinâmico de produtos (Hoodie, Cap, T-Shirt)
-- Seleção de cores com preços diferenciados
-- Opções de artwork (screen printing, embroidery)
-- Neck labels personalizados
-- **Embellishments** com configurações avançadas
+### 🛍️ Products & Customizations
+- Dynamic product dropdown (Hoodie, Cap, T-Shirt)
+- Color selection with differentiated pricing
+- Artwork options (screen printing, embroidery)
+- Custom neck labels
+- **Embellishments** with advanced configurations
 
-### 💰 Engine de Preços
-- Faixas de preço por quantidade (1, 25, 50, 100+)
-- Cálculo automático de custos unitários
-- Lead times baseados em volume
-- **Data de entrega estimada** (dias úteis)
-- Formatação de moeda localizada
+### 💰 Pricing Engine
+- Quantity-based price breaks (1, 25, 50, 100+)
+- Automatic unit cost calculation
+- Volume-based lead times
+- **Estimated delivery date** (business days)
+- Localized currency formatting
 
 ### 🎨 Interface & UX
-- Design responsivo e acessível
-- Controles de quantidade (input + slider + botões)
-- Métricas em tempo real
-- Visual idêntico ao embed original
-- Suporte a teclado e screen readers
+- Responsive and accessible design
+- Quantity controls (input + slider + buttons)
+- Real-time metrics
+- Visual identical to original embed
+- Keyboard and screen reader support
 
-## 🛠️ Instalação & Uso
+## 🛠️ Installation & Usage
 
-### Desenvolvimento Local
+### Local Development
 
 ```bash
-# Clone o repositório
+# Clone the repository
 git clone https://github.com/Bioblanks-accounts/bioblanks-quote-calculator.git
 cd bioblanks-quote-calculator
 
-# Instale dependências
+# Install dependencies
 npm install
 
-# Desenvolvimento com hot reload
+# Development with hot reload
 npm run dev
 
-# Build para produção
+# Build for production
 npm run build
 
-# Executar testes
+# Run tests
 npm test
 ```
 
-### Integração no Webflow
+### Webflow Integration
 
-#### Opção 1: Script Inline (Recomendado)
+#### Option 1: Inline Script (Recommended)
 ```html
-<!-- Cole antes do </body> no Webflow -->
+<!-- Paste before </body> in Webflow -->
 <script>
-// Cole aqui o conteúdo de dist/quote-calc.v1.js
+// Paste here the content of dist/quote-calc.v1.js
 </script>
 ```
 
-#### Opção 2: CDN Externo
+#### Option 2: External CDN
 ```html
 <script type="module" src="https://cdn.jsdelivr.net/gh/Bioblanks-accounts/bioblanks-quote-calculator@main/dist/quote-calc.v1.js"></script>
 ```
 
-#### Opção 3: Upload de Arquivo
-1. Faça upload do `dist/quote-calc.v1.js` para seu hosting
-2. Referencie o arquivo no Webflow Custom Code
+#### Option 3: File Upload
+1. Upload `dist/quote-calc.v1.js` to your hosting
+2. Reference the file in Webflow Custom Code
 
-## 📁 Estrutura do Projeto
+## 📁 Project Structure
 
 ```
 bioblanks-quote-calculator/
 ├── src/
-│   ├── types.ts           # Tipos TypeScript (ConfigSchema, Product, etc)
-│   ├── pricing-core.ts    # Engine de preços (funções puras)
-│   ├── pricing-core.test.ts # Testes da engine
-│   ├── mock-data.ts       # Dados mock para desenvolvimento
-│   ├── quote-wc.ts        # Web Component principal
-│   └── loader.ts          # Inicializador (entry point)
+│   ├── types.ts           # TypeScript types (ConfigSchema, Product, etc)
+│   ├── pricing-core.ts    # Pricing engine (pure functions)
+│   ├── pricing-core.test.ts # Engine tests
+│   ├── mock-data.ts       # Mock data for development
+│   ├── quote-wc.ts        # Main Web Component
+│   └── loader.ts          # Initializer (entry point)
 ├── dist/
-│   └── quote-calc.v1.js   # Bundle final para produção
-├── embed.html             # HTML original do embed
-├── index.html             # Página de desenvolvimento
-├── package.json           # Dependências e scripts
-├── vite.config.ts         # Configuração do Vite
-├── vitest.config.ts       # Configuração de testes
-└── README.md              # Esta documentação
+│   └── quote-calc.v1.js   # Final production bundle
+├── embed.html             # Original embed HTML
+├── index.html             # Development page
+├── package.json           # Dependencies and scripts
+├── vite.config.ts         # Vite configuration
+├── vitest.config.ts       # Test configuration
+└── README.md              # This documentation
 ```
 
-## 🧪 API & Eventos
+## 🧪 API & Events
 
-### Eventos Customizados
+### Custom Events
 
 ```javascript
-// Escutar mudanças na calculadora
+// Listen to calculator changes
 document.addEventListener('quote:change', (event) => {
-  console.log('Quote atualizado:', event.detail);
-  // event.detail contém: product, quantity, prices, delivery, etc.
+  console.log('Quote updated:', event.detail);
+  // event.detail contains: product, quantity, prices, delivery, etc.
 });
 
-// Escutar submissões
+// Listen to submissions
 document.addEventListener('quote:submit', (event) => {
-  console.log('Quote enviado:', event.detail);
+  console.log('Quote submitted:', event.detail);
   // event.detail.action = 'email' | 'design'
 });
 ```
 
-### Controle Programático
+### Programmatic Control
 
 ```javascript
-// Obter instância do componente
+// Get component instance
 const calc = document.querySelector('bioblanks-quote-calc');
 
-// Atualizar configuração
+// Update configuration
 calc.setConfig(newConfigData);
 
-// Forçar reinicialização
+// Force reinitialization
 window.initBioblanksCalculator();
 ```
 
-## 🔧 Configuração de Dados
+## 🔧 Data Configuration
 
-### Estrutura do ConfigSchema
+### ConfigSchema Structure
 
 ```typescript
 interface ConfigSchema {
   currency: string;           // "USD", "EUR", etc.
-  products: Product[];        // Array de produtos disponíveis
+  products: Product[];        // Array of available products
   options: {
-    colors?: ColorOption[];   // Cores disponíveis
-    artwork?: AddOn[];        // Opções de artwork
-    neckLabel?: AddOn[];      // Tipos de neck label
+    colors?: ColorOption[];   // Available colors
+    artwork?: AddOn[];        // Artwork options
+    neckLabel?: AddOn[];      // Neck label types
   };
-  leadTimeRules: Array<{      // Regras de lead time
+  leadTimeRules: Array<{      // Lead time rules
     minQty: number;
     days: number;
   }>;
-  limits: {                   // Limites de quantidade
+  limits: {                   // Quantity limits
     minQty: number;
     maxQty: number;
     qtyStep?: number;
@@ -168,44 +168,44 @@ interface ConfigSchema {
 }
 ```
 
-### Conectar ao CMS do Webflow
+### Connect to Webflow CMS
 
-Para substituir dados mock por dados reais:
+To replace mock data with real data:
 
-1. **Edite `src/loader.ts`**
-2. **Substitua `mockConfig`** por carregamento do CMS:
+1. **Edit `src/loader.ts`**
+2. **Replace `mockConfig`** with CMS loading:
 
 ```typescript
-// Exemplo de integração com Webflow CMS
+// Example Webflow CMS integration
 async function loadConfigFromWebflow() {
   const response = await fetch('/api/calculator-config');
   return await response.json();
 }
 
-// No loader.ts
+// In loader.ts
 const config = await loadConfigFromWebflow();
 calcComponent.setConfig(config);
 ```
 
-## 🧪 Testes
+## 🧪 Testing
 
-### Executar Testes
+### Run Tests
 ```bash
-npm test          # Executar todos os testes
-npm run test:ui   # Interface visual dos testes
+npm test          # Run all tests
+npm run test:ui   # Visual test interface
 ```
 
-### Cobertura de Testes
-- ✅ **Engine de preços** - 100% das funções puras
-- ✅ **Cálculo de faixas** - Diferentes quantidades
-- ✅ **Lead times** - Regras de prazo
-- ✅ **Formatação** - Moedas e datas
-- ✅ **Dias úteis** - Cálculo de delivery
-- ⚠️ **Componentes DOM** - Pendente (4/19 testes)
+### Test Coverage
+- ✅ **Pricing engine** - 100% of pure functions
+- ✅ **Price breaks calculation** - Different quantities
+- ✅ **Lead times** - Timing rules
+- ✅ **Formatting** - Currencies and dates
+- ✅ **Business days** - Delivery calculation
+- ⚠️ **DOM components** - Pending (4/19 tests)
 
-## 🎨 Personalização
+## 🎨 Customization
 
-### Variáveis CSS
+### CSS Variables
 ```css
 #quote-calc {
   --rc-font: system-ui, sans-serif;
@@ -214,13 +214,13 @@ npm run test:ui   # Interface visual dos testes
   --rc-text: #0f172a;
   --rc-accent: #111827;
   --rc-radius: 12px;
-  /* ... mais variáveis disponíveis */
+  /* ... more variables available */
 }
 ```
 
-### Temas Customizados
+### Custom Themes
 ```css
-/* Tema escuro */
+/* Dark theme */
 #quote-calc.dark-theme {
   --rc-bg: #1a1a1a;
   --rc-card: #2a2a2a;
@@ -230,42 +230,42 @@ npm run test:ui   # Interface visual dos testes
 
 ## 🚧 Roadmap
 
-### Próximas Funcionalidades
-- [ ] **Integração CMS** - Conexão direta com Webflow CMS API
-- [ ] **Cálculo de Embellishments** - Preços dinâmicos para screen print/embroidery
-- [ ] **Feriados** - Suporte a feriados no cálculo de delivery
-- [ ] **Cutoff de Horário** - Pedidos após horário específico
-- [ ] **Analytics** - Tracking de eventos de conversão
-- [ ] **A/B Testing** - Variações de interface
-- [ ] **Multi-moeda** - Suporte a mais moedas
-- [ ] **Testes E2E** - Cypress/Playwright
+### Upcoming Features
+- [ ] **CMS Integration** - Direct connection with Webflow CMS API
+- [ ] **Embellishments Calculation** - Dynamic pricing for screen print/embroidery
+- [ ] **Holidays** - Holiday support in delivery calculation
+- [ ] **Time Cutoff** - Orders after specific time
+- [ ] **Analytics** - Conversion event tracking
+- [ ] **A/B Testing** - Interface variations
+- [ ] **Multi-currency** - Support for more currencies
+- [ ] **E2E Tests** - Cypress/Playwright
 
-### Melhorias Técnicas
-- [ ] **Bundle Splitting** - Carregamento lazy de componentes
-- [ ] **Web Workers** - Cálculos em background
-- [ ] **PWA** - Cache offline da calculadora
-- [ ] **Storybook** - Documentação visual dos componentes
+### Technical Improvements
+- [ ] **Bundle Splitting** - Lazy loading of components
+- [ ] **Web Workers** - Background calculations
+- [ ] **PWA** - Offline calculator cache
+- [ ] **Storybook** - Visual component documentation
 
-## 🤝 Contribuição
+## 🤝 Contributing
 
-### Como Contribuir
-1. Fork o repositório
-2. Crie uma branch: `git checkout -b feature/nova-funcionalidade`
-3. Commit suas mudanças: `git commit -m 'Adiciona nova funcionalidade'`
-4. Push para a branch: `git push origin feature/nova-funcionalidade`
-5. Abra um Pull Request
+### How to Contribute
+1. Fork the repository
+2. Create a branch: `git checkout -b feature/new-feature`
+3. Commit your changes: `git commit -m 'Add new feature'`
+4. Push to the branch: `git push origin feature/new-feature`
+5. Open a Pull Request
 
-### Padrões de Código
-- **TypeScript** com tipagem estrita
-- **Prettier** para formatação
-- **ESLint** para qualidade de código
-- **Conventional Commits** para mensagens
+### Code Standards
+- **TypeScript** with strict typing
+- **Prettier** for formatting
+- **ESLint** for code quality
+- **Conventional Commits** for messages
 
-## 📄 Licença
+## 📄 License
 
-Este projeto está licenciado sob a [MIT License](LICENSE).
+This project is licensed under the [MIT License](LICENSE).
 
-## 📞 Suporte
+## 📞 Support
 
 - 🐛 **Issues**: [GitHub Issues](https://github.com/Bioblanks-accounts/bioblanks-quote-calculator/issues)
 - 💬 **Discussions**: [GitHub Discussions](https://github.com/Bioblanks-accounts/bioblanks-quote-calculator/discussions)
@@ -274,13 +274,13 @@ Este projeto está licenciado sob a [MIT License](LICENSE).
 ## 🏆 Changelog
 
 ### v1.0.0 (2024-08-15)
-- ✨ Primeira versão da calculadora refatorada
-- ✨ Engine de preços isolada e testável
-- ✨ Web Components com eventos customizados
-- ✨ Build otimizado de 3.72 kB
-- ✨ Dados mock para desenvolvimento
-- ✨ Integração mantida com Webflow Forms
+- ✨ First version of refactored calculator
+- ✨ Isolated and testable pricing engine
+- ✨ Web Components with custom events
+- ✨ Optimized 3.72 kB build
+- ✨ Mock data for development
+- ✨ Maintained integration with Webflow Forms
 
 ---
 
-**Desenvolvido com ❤️ pela equipe Bioblanks**
+**Developed with ❤️ by the Bioblanks team**
