@@ -744,10 +744,13 @@
               ['25cm2','50cm2','75cm2'].forEach(function(t){ var o=new Option(t,t); s2.add(o); });
               w2.appendChild(s2); o2.appendChild(l2); o2.appendChild(w2);
               var o3 = document.createElement('div'); o3.className='rc-opt';
-              var l3 = document.createElement('label'); l3.textContent='3D';
-              var cb = document.createElement('input'); cb.type='checkbox'; cb.name='emb_3d'; cb.id='emb_3d'; cb.style.marginRight='8px';
-              var wrap3 = document.createElement('div'); wrap3.style.display='flex'; wrap3.style.alignItems='center'; wrap3.appendChild(cb); wrap3.appendChild(l3);
-              o3.appendChild(wrap3);
+              var l3 = document.createElement('label'); l3.setAttribute('for','emb_3d'); l3.textContent='3D';
+              var w3 = document.createElement('div'); w3.className='rc-select-wrap';
+              w3.style.display='flex'; w3.style.alignItems='center'; w3.style.justifyContent='flex-start'; w3.style.padding='10px 14px'; w3.style.height='var(--rc-input-h)';
+              var cb = document.createElement('input'); cb.type='checkbox'; cb.name='emb_3d'; cb.id='emb_3d'; cb.style.margin='0';
+              var labelText = document.createElement('span'); labelText.textContent='Enable 3D'; labelText.style.marginLeft='8px'; labelText.style.fontSize='14px';
+              w3.appendChild(cb); w3.appendChild(labelText);
+              o3.appendChild(l3); o3.appendChild(w3);
 
               opts.appendChild(o1); opts.appendChild(o2); opts.appendChild(o3);
               body.appendChild(opts);
