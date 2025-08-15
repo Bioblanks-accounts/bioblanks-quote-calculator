@@ -81,6 +81,7 @@
            Estilos escopados (#quote-calc)
            Sem "Development costs", métricas em 1 linha no desktop
            + Bloco de Embellishments (pílulas + rows)
+           + Color Pills/Swatches
            ========================= */
         #quote-calc, #quote-calc * { box-sizing: border-box; }
         #quote-calc {
@@ -171,7 +172,7 @@
         #quote-calc label { display: block; font-size: 12px; color: var(--rc-muted); margin-bottom: 6px; }
         #quote-calc .rc-opt select { background: #f3f4f6; }
 
-        /* Quantidade: linha + botões circulares + slider + input */
+        /* Quantidade: linha + botões + slider + input */
         #quote-calc .rc-qty-row { margin-top: var(--rc-space-4); }
         #quote-calc .rc-qty-line { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: var(--rc-space-4); }
         #quote-calc .rc-stepper { display: inline-flex; gap: 10px; align-items: center; }
@@ -194,7 +195,7 @@
           padding: 0 12px; font-size: 18px; text-align: center; background: #f3f4f6;
         }
 
-        /* Métricas: sem Development costs */
+        /* Métricas */
         #quote-calc .rc-metrics {
           display: grid; gap: 24px; align-items: end; margin-top: 28px;
           grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -202,7 +203,7 @@
         #quote-calc .rc-metric label { display: block; font-size: 12px; color: var(--rc-muted); margin-bottom: 6px; }
         #quote-calc .rc-metric .rc-big { font-size: 28px; font-weight: 700; }
 
-        /* 1 linha no desktop (5 blocos: Lead, Delivery, Qty, Unit, Subtotal) */
+        /* 1 linha no desktop */
         @media (min-width: 1024px) {
           #quote-calc .rc-metrics { grid-template-columns: repeat(5, minmax(120px, 1fr)); gap: 16px; }
           #quote-calc .rc-metric label { font-size: 11px; line-height: 1.2; }
@@ -267,6 +268,36 @@
         }
         #quote-calc .rc-emb-body { margin-top: 12px; }
         #quote-calc .rc-emb-row.rc-collapsed .rc-emb-body { display: none; }
+
+        /* ===== Color Pills (swatches) ===== */
+        #quote-calc .rc-color-pills { display: flex; flex-wrap: wrap; gap: 10px; }
+        #quote-calc .rc-color-pill {
+          display: inline-flex; align-items: center; gap: 10px;
+          padding: 8px 12px;
+          border: 1px solid var(--rc-border);
+          background: #fff;
+          border-radius: 9999px;
+          cursor: pointer;
+          min-height: 36px;
+          transition: box-shadow .15s ease, border-color .15s ease, transform .05s ease;
+          outline: none;
+        }
+        #quote-calc .rc-color-pill:active { transform: translateY(1px); }
+        #quote-calc .rc-color-pill[aria-selected="true"] {
+          border-color: #FF9533;
+          box-shadow: 0 0 0 3px rgba(255,149,51,.18);
+        }
+        #quote-calc .rc-swatch {
+          width: 18px; height: 18px; border-radius: 50%;
+          border: 1px solid #d1d5db; box-shadow: inset 0 0 0 .5px rgba(0,0,0,.06);
+          flex: 0 0 18px;
+        }
+        #quote-calc .rc-swatch.is-white { border-color: #e5e7eb; box-shadow: inset 0 0 0 .5px rgba(0,0,0,.1); }
+        #quote-calc .rc-color-pill.is-custom .rc-swatch {
+          background: repeating-conic-gradient(#eee 0% 25%, #ddd 0% 50%) 50%/10px 10px;
+        }
+        #quote-calc .rc-color-label { font-size: 13px; font-weight: 600; color: #111827; }
+        #quote-calc .rc-color-extra { font-size: 12px; color: var(--rc-muted); }
       </style>
 
       <!-- JSON (USD) -->
@@ -313,7 +344,11 @@
         ],
         "options": {
           "colors": [
-            { "id": "bright-white", "label": "Bright White", "add": 0 }
+            { "id": "white",        "label": "White",        "hex": "#ffffff", "add": 0   },
+            { "id": "white-rtd",    "label": "White RTD",    "hex": "#f7f7f7", "add": 0   },
+            { "id": "black",        "label": "Black",        "hex": "#0f0f10", "add": 0   },
+            { "id": "heather-grey", "label": "Heather Grey", "hex": "#c8c9cb", "add": 0   },
+            { "id": "custom",       "label": "Custom Color", "hex": null,      "add": 0.4 }
           ],
           "artwork": [
             { "id": "none", "label": "No artwork", "addPerUnit": 0 },
@@ -355,10 +390,16 @@
         <section class="rc-section">
           <h2>Add Customizations</h2>
           <div class="rc-opts">
+            <!-- CORES: pílulas/swatches -->
             <div class="rc-opt">
-              <label for="color-select">Garment Color</label>
-              <div class="rc-select-wrap"><select id="color-select" name="color"></select></div>
+              <label for="color-pills">Garment Color</label>
+              <div id="color-pills" class="rc-color-pills" role="listbox" aria-label="Garment Color"></div>
+              <!-- fallback invisível -->
+              <div class="rc-select-wrap rc-hidden">
+                <select id="color-select" name="color" aria-hidden="true"></select>
+              </div>
             </div>
+
             <div class="rc-opt">
               <label for="artwork-select">Artwork</label>
               <div class="rc-select-wrap"><select id="artwork-select" name="artwork"></select></div>
@@ -369,7 +410,7 @@
             </div>
           </div>
 
-          <!-- Embellishments (NOVO BLOCO) -->
+          <!-- Embellishments -->
           <div class="rc-emb-block" aria-labelledby="rc-embellishments-label">
             <label id="rc-embellishments-label">Embellishments</label>
             <div class="rc-emb-pills">
@@ -378,7 +419,7 @@
             </div>
             <div id="rc-embellishments-list" class="rc-emb-list"></div>
           </div>
-          <!-- FIM Embellishments -->
+          <!-- /Embellishments -->
         </section>
 
         <section class="rc-section">
@@ -471,6 +512,7 @@
 
             var productSelect=byId('product-select'), card=byId('rc-product-card'), img=byId('product-image'), name=byId('product-name'), desc=byId('product-desc');
             var colorSel=byId('color-select'), artSel=byId('artwork-select'), neckSel=byId('neck-select');
+            var colorPills=byId('color-pills');
             var qtyInput=byId('qty-input'), qtyRange=byId('qty-range'), qtyInc=byId('qty-inc'), qtyDec=byId('qty-dec');
             var lead=byId('lead-time-value'), unit=byId('unit-cost-value'), sub=byId('subtotal-value'), delivery=byId('delivery-date-value');
             var emailBtn=byId('email-btn'), designBtn=byId('design-btn');
@@ -487,7 +529,7 @@
               currency:currency,
               cta:Object.assign({startDesignUrl:'#',emailSubject:'Quote request – {{productName}}',emailTo:''},cfg.cta||{}),
               selectedColor:null, selectedArtwork:null, selectedNeck:null,
-              embellishments:{ order:[], items:{} } // NOVO estado
+              embellishments:{ order:[], items:{} }
             };
 
             function populateSelect(sel,list){sel.innerHTML='';if(!list.length){var o=document.createElement('option');o.value='';o.textContent='No items';sel.appendChild(o);sel.disabled=true;return;} sel.disabled=false;list.forEach((it,idx)=>{var o=document.createElement('option');o.value=it.id||String(idx);o.textContent=it.name||it.label||('Item '+(idx+1));sel.appendChild(o);}); sel.value=sel.options[0].value;}
@@ -498,13 +540,85 @@
             productSelect.addEventListener('change',function(){ var v=this.value; var found=state.products.find((p,idx)=> (p.id&&p.id===v)||(!p.id&&String(idx)===v)); state.product=found||state.products[0]; renderProduct(state.product); recompute(); });
 
             function ensureOpts(sel,list){sel.innerHTML=''; if(!list.length){var o=document.createElement('option');o.value='';o.textContent='N/A'; sel.appendChild(o); sel.disabled=true; return;} sel.disabled=false; list.forEach((it,idx)=>{var o=document.createElement('option');o.value=it.id||String(idx);o.textContent=it.label||('Option '+(idx+1)); sel.appendChild(o);}); sel.value=list[0].id||sel.options[0].value;}
-            ensureOpts(colorSel,state.options.colors); ensureOpts(artSel,state.options.artwork); ensureOpts(neckSel,state.options.neckLabel);
+            // artwork & neck via select
+            ensureOpts(artSel,state.options.artwork);
+            ensureOpts(neckSel,state.options.neckLabel);
 
-            function syncSel(){ state.selectedColor=state.options.colors.find(x=>String(x.id||'')===String(colorSel.value||''))||state.options.colors[0]||null;
-                                state.selectedArtwork=state.options.artwork.find(x=>String(x.id||'')===String(artSel.value||''))||state.options.artwork[0]||null;
-                                state.selectedNeck=state.options.neckLabel.find(x=>String(x.id||'')===String(neckSel.value||''))||state.options.neckLabel[0]||null; }
-            syncSel(); colorSel.addEventListener('change',()=>{syncSel();recompute();}); artSel.addEventListener('change',()=>{syncSel();recompute();}); neckSel.addEventListener('change',()=>{syncSel();recompute();});
+            // ========== Color Pills ==========
+            function renderColorPills() {
+              colorPills.innerHTML = '';
+              var list = state.options.colors || [];
+              if (!list.length) return;
 
+              // também preenche o select (fallback invisível)
+              ensureOpts(colorSel, list);
+
+              list.forEach(function(c, idx){
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'rc-color-pill' + (c.id === 'custom' ? ' is-custom' : '');
+                btn.setAttribute('role','option');
+                btn.setAttribute('aria-selected','false');
+                btn.setAttribute('data-id', c.id || String(idx));
+                btn.title = c.label;
+
+                var sw = document.createElement('span');
+                sw.className = 'rc-swatch' + ((c.hex === '#ffffff' || c.hex === '#fff') ? ' is-white' : '');
+                if (c.hex) sw.style.background = c.hex;
+
+                var label = document.createElement('span');
+                label.className = 'rc-color-label';
+                label.textContent = c.label;
+
+                var extra = document.createElement('span');
+                extra.className = 'rc-color-extra';
+                if (typeof c.add === 'number' && c.add > 0) {
+                  extra.textContent = ' +$' + c.add.toFixed(2);
+                }
+
+                btn.appendChild(sw);
+                btn.appendChild(label);
+                if (extra.textContent) { btn.appendChild(document.createTextNode(' ')); btn.appendChild(extra); }
+
+                btn.addEventListener('click', function(){
+                  selectColorById(btn.getAttribute('data-id'));
+                });
+                btn.addEventListener('keydown', function(e){
+                  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectColorById(btn.getAttribute('data-id')); }
+                });
+
+                colorPills.appendChild(btn);
+              });
+            }
+
+            function selectColorById(id) {
+              var list = state.options.colors || [];
+              var found = list.find(function(x){ return String(x.id||'') === String(id||''); }) || list[0] || null;
+              state.selectedColor = found;
+
+              Array.prototype.forEach.call(colorPills.querySelectorAll('.rc-color-pill'), function(el){
+                el.setAttribute('aria-selected', el.getAttribute('data-id') === String(found && found.id));
+              });
+
+              if (colorSel && colorSel.options && colorSel.options.length) {
+                colorSel.value = found ? (found.id || colorSel.options[0].value) : colorSel.options[0].value;
+              }
+
+              recompute();
+            }
+            // init cores
+            renderColorPills();
+            selectColorById((state.options.colors[0] && state.options.colors[0].id) || '');
+
+            function syncSel(){
+              state.selectedArtwork=state.options.artwork.find(x=>String(x.id||'')===String(artSel.value||''))||state.options.artwork[0]||null;
+              state.selectedNeck=state.options.neckLabel.find(x=>String(x.id||'')===String(neckSel.value||''))||state.options.neckLabel[0]||null;
+            }
+            syncSel();
+            artSel.addEventListener('change',()=>{syncSel();recompute();});
+            neckSel.addEventListener('change',()=>{syncSel();recompute();});
+
+            // qty
             qtyInput.min=String(state.limits.minQty); qtyInput.max=String(state.limits.maxQty); qtyInput.step=String(state.limits.qtyStep); qtyInput.value=String(state.qty);
             qtyRange.min=String(state.limits.minQty); qtyRange.max=String(state.limits.maxQty); qtyRange.step=String(state.limits.qtyStep); qtyRange.value=String(state.qty);
             function setQty(v){ var val=clamp(toNumber(v,state.qty),toNumber(state.limits.minQty,1),toNumber(state.limits.maxQty,1000)); var step=Math.max(1,toNumber(state.limits.qtyStep,1)); val=Math.round(val/step)*step; state.qty=val; qtyInput.value=String(val); qtyRange.value=String(val); }
@@ -526,7 +640,6 @@
               state.embellishments.order.forEach(function(key){
                 var v = state.embellishments.items[key];
                 if (!v) return;
-                // copia só os campos relevantes
                 if (key === 'screenprint') {
                   payload.items[key] = {
                     sp_colors: v.sp_colors || '1 color',
@@ -563,21 +676,18 @@
 
               var body = document.createElement('div'); body.className='rc-emb-body'; body.id='emb-body-screenprint';
               var opts = document.createElement('div'); opts.className='rc-opts';
-              // sp_colors
               var o1 = document.createElement('div'); o1.className='rc-opt';
               var l1 = document.createElement('label'); l1.setAttribute('for','sp_colors'); l1.textContent='Colors';
               var w1 = document.createElement('div'); w1.className='rc-select-wrap';
               var s1 = document.createElement('select'); s1.name='sp_colors'; s1.id='sp_colors';
               ['1 color','2 colors','3+ colors'].forEach(function(t){ var o=new Option(t,t); s1.add(o); });
               w1.appendChild(s1); o1.appendChild(l1); o1.appendChild(w1);
-              // sp_size
               var o2 = document.createElement('div'); o2.className='rc-opt';
               var l2 = document.createElement('label'); l2.setAttribute('for','sp_size'); l2.textContent='Print size';
               var w2 = document.createElement('div'); w2.className='rc-select-wrap';
               var s2 = document.createElement('select'); s2.name='sp_size'; s2.id='sp_size';
               ['8x10','10x12','12x14'].forEach(function(t){ var o=new Option(t,t); s2.add(o); });
               w2.appendChild(s2); o2.appendChild(l2); o2.appendChild(w2);
-              // sp_extras
               var o3 = document.createElement('div'); o3.className='rc-opt';
               var l3 = document.createElement('label'); l3.setAttribute('for','sp_extras'); l3.textContent='Extras';
               var w3 = document.createElement('div'); w3.className='rc-select-wrap';
@@ -589,7 +699,6 @@
               body.appendChild(opts);
               row.appendChild(header); row.appendChild(body);
 
-              // Eventos
               header.addEventListener('click', function(e){
                 if (e.target === del) return; // delete trata seu próprio click
                 toggleRow(row);
@@ -622,21 +731,18 @@
 
               var body = document.createElement('div'); body.className='rc-emb-body'; body.id='emb-body-embroidery';
               var opts = document.createElement('div'); opts.className='rc-opts';
-              // emb_colors
               var o1 = document.createElement('div'); o1.className='rc-opt';
               var l1 = document.createElement('label'); l1.setAttribute('for','emb_colors'); l1.textContent='Colors';
               var w1 = document.createElement('div'); w1.className='rc-select-wrap';
               var s1 = document.createElement('select'); s1.name='emb_colors'; s1.id='emb_colors';
               ['1-3 colors','4-6 colors','7+ colors'].forEach(function(t){ var o=new Option(t,t); s1.add(o); });
               w1.appendChild(s1); o1.appendChild(l1); o1.appendChild(w1);
-              // emb_area
               var o2 = document.createElement('div'); o2.className='rc-opt';
               var l2 = document.createElement('label'); l2.setAttribute('for','emb_area'); l2.textContent='Area';
               var w2 = document.createElement('div'); w2.className='rc-select-wrap';
               var s2 = document.createElement('select'); s2.name='emb_area'; s2.id='emb_area';
               ['25cm2','50cm2','75cm2'].forEach(function(t){ var o=new Option(t,t); s2.add(o); });
               w2.appendChild(s2); o2.appendChild(l2); o2.appendChild(w2);
-              // 3D checkbox
               var o3 = document.createElement('div'); o3.className='rc-opt';
               var l3 = document.createElement('label'); l3.textContent='3D';
               var cb = document.createElement('input'); cb.type='checkbox'; cb.name='emb_3d'; cb.id='emb_3d'; cb.style.marginRight='8px';
@@ -647,7 +753,6 @@
               body.appendChild(opts);
               row.appendChild(header); row.appendChild(body);
 
-              // Eventos
               header.addEventListener('click', function(e){
                 if (e.target === del) return;
                 toggleRow(row);
@@ -693,15 +798,13 @@
             byId('btn-add-screenprint').addEventListener('click', function(){ addOrToggle('screenprint'); });
             byId('btn-add-embroidery').addEventListener('click', function(){ addOrToggle('embroidery'); });
 
-            /* ===== /Embellishments UI ===== */
-
             function setForm(n,v){var el=form.querySelector('input[name="'+n+'"]'); if(el) el.value=v;}
             function serializeOptions(){
               return {
                 color:state.selectedColor?{id:state.selectedColor.id,label:state.selectedColor.label}:null,
                 artwork:state.selectedArtwork?{id:state.selectedArtwork.id,label:state.selectedArtwork.label,addPerUnit:toNumber(state.selectedArtwork.addPerUnit,0)}:null,
                 neckLabel:state.selectedNeck?{id:state.selectedNeck.id,label:state.selectedNeck.label,addPerUnit:toNumber(state.selectedNeck.addPerUnit,0)}:null,
-                embellishments:getEmbPayload() // NOVO
+                embellishments:getEmbPayload()
               };
             }
 
@@ -752,7 +855,6 @@
                 if(state.selectedColor&&state.selectedColor.id) q.set('color',state.selectedColor.id);
                 if(state.selectedArtwork&&state.selectedArtwork.id) q.set('artwork',state.selectedArtwork.id);
                 if(state.selectedNeck&&state.selectedNeck.id) q.set('neckLabel',state.selectedNeck.id);
-                // Embellishments podem ser serializados e passados se desejar (opcional)
                 var j=url.indexOf('?')===-1?'?':'&'; try{window.location.href=url+j+q.toString();}catch(e){window.location.assign(url);}
               }
             });
