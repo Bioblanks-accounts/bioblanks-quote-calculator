@@ -1,0 +1,683 @@
+<div id="quote-calc" data-form-id="">
+  <style>
+    /* =========================
+       Estilos escopados (#quote-calc)
+       Sem "Development costs", métricas em 1 linha no desktop
+       + Bloco de Embellishments (pílulas + rows)
+       ========================= */
+    #quote-calc, #quote-calc * { box-sizing: border-box; }
+    #quote-calc {
+      --rc-font: system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, sans-serif;
+      --rc-bg: #f4f5f6;
+      --rc-card: #ffffff;
+      --rc-text: #0f172a;
+      --rc-muted: #6b7280;
+      --rc-border: #e5e7eb;
+      --rc-accent: #111827;
+      --rc-focus-ring: 2px solid #111827;
+      --rc-radius: 12px;
+      --rc-space-2: 8px;
+      --rc-space-3: 12px;
+      --rc-space-4: 16px;
+      --rc-space-5: 20px;
+      --rc-space-6: 24px;
+      --rc-space-8: 32px;
+      --rc-btn-h: 44px;
+      --rc-input-h: 40px;
+      --rc-pill-radius: 9999px;
+    }
+
+    #quote-calc {
+      font-family: var(--rc-font);
+      color: var(--rc-text);
+      background: var(--rc-bg);
+      padding: 32px 32px 56px;
+      border-radius: 18px;
+      border: 1px solid #e6e6e6;
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+
+    #quote-calc h2 {
+      font-size: 22px;
+      line-height: 1.2;
+      margin: 0 0 var(--rc-space-5);
+      font-weight: 700;
+    }
+
+    #quote-calc .rc-section {
+      background: var(--rc-card);
+      border: 1px solid var(--rc-border);
+      border-radius: var(--rc-radius);
+      padding: 28px;
+    }
+
+    #quote-calc .rc-grid {
+      display: grid;
+      gap: 32px;
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    #quote-calc fieldset { border: 0; margin: 0; padding: 0; }
+    #quote-calc legend { font-size: 22px; font-weight: 700; margin-bottom: var(--rc-space-5); }
+
+    /* Card do produto + seletor */
+    #quote-calc .rc-product-top { display: grid; gap: var(--rc-space-4); }
+    #quote-calc .rc-select-wrap { position: relative; }
+    #quote-calc select {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: var(--rc-input-h);
+      border-radius: 10px; border: 1px solid var(--rc-border);
+      background: #f3f4f6;
+      padding: 0 40px 0 14px; font-size: 14px;
+    }
+    #quote-calc .rc-select-wrap::after {
+      content: "▾";
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      color: #111827; font-size: 14px; pointer-events: none;
+    }
+    #quote-calc .rc-product-card {
+      display: grid; grid-template-columns: 72px 1fr; gap: var(--rc-space-4);
+      align-items: center; background: #f7f7f8;
+      border: 1px solid var(--rc-border); border-radius: 12px; padding: var(--rc-space-4);
+    }
+    #quote-calc .rc-product-card img {
+      width: 72px; height: 72px; object-fit: cover; border-radius: 10px; border: 1px solid var(--rc-border); background: #fff;
+    }
+    #quote-calc .rc-product-title { font-weight: 700; margin: 0 0 4px; }
+    #quote-calc .rc-product-desc { margin: 0; color: var(--rc-muted); font-size: 13px; }
+
+    /* Linha de customizações (3 colunas) */
+    #quote-calc .rc-opts { display: grid; gap: var(--rc-space-4); }
+    @media (min-width: 860px) { #quote-calc .rc-opts { grid-template-columns: 1fr 1fr 1fr; } }
+    #quote-calc label { display: block; font-size: 12px; color: var(--rc-muted); margin-bottom: 6px; }
+    #quote-calc .rc-opt select { background: #f3f4f6; }
+
+    /* Quantidade: linha + botões circulares + slider + input */
+    #quote-calc .rc-qty-row { margin-top: var(--rc-space-4); }
+    #quote-calc .rc-qty-line { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: var(--rc-space-4); }
+    #quote-calc .rc-stepper { display: inline-flex; gap: 10px; align-items: center; }
+    #quote-calc .rc-icon-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--rc-border); background: #fff; cursor: pointer;
+    }
+    #quote-calc .rc-range {
+      -webkit-appearance: none; appearance: none; height: 4px; width: 100%;
+      background: #e5e7eb; border-radius: 999px; outline: none;
+    }
+    #quote-calc .rc-range::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 20px; height: 20px; border-radius: 50%; background: #111827; cursor: pointer;
+      border: 2px solid #fff; box-shadow: 0 0 0 1px #111827;
+    }
+    #quote-calc .rc-qty-input {
+      width: 100%; max-width: 140px; height: var(--rc-input-h);
+      border-radius: 10px; border: 1px solid var(--rc-border);
+      padding: 0 12px; font-size: 18px; text-align: center; background: #f3f4f6;
+    }
+
+    /* Métricas: sem Development costs */
+    #quote-calc .rc-metrics {
+      display: grid; gap: 24px; align-items: end; margin-top: 28px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+    #quote-calc .rc-metric label { display: block; font-size: 12px; color: var(--rc-muted); margin-bottom: 6px; }
+    #quote-calc .rc-metric .rc-big { font-size: 28px; font-weight: 700; }
+
+    /* 1 linha no desktop (5 blocos: Lead, Delivery, Qty, Unit, Subtotal) */
+    @media (min-width: 1024px) {
+      #quote-calc .rc-metrics { grid-template-columns: repeat(5, minmax(120px, 1fr)); gap: 16px; }
+      #quote-calc .rc-metric label { font-size: 11px; line-height: 1.2; }
+      #quote-calc .rc-metric .rc-big { font-size: 20px; line-height: 1.15; font-weight: 700; }
+      #quote-calc .rc-qty-input { max-width: 110px; height: 36px; font-size: 16px; padding: 0 10px; }
+    }
+    @media (min-width: 900px) and (max-width: 1023px) {
+      #quote-calc .rc-metrics { grid-template-columns: repeat(5, minmax(130px, 1fr)); gap: 18px; }
+      #quote-calc .rc-metric .rc-big { font-size: 22px; }
+    }
+
+    /* Ações */
+    #quote-calc .rc-actions { display: flex; gap: var(--rc-space-4); flex-wrap: wrap; justify-content: flex-end; margin-top: 28px; }
+    #quote-calc .rc-btn {
+      height: var(--rc-btn-h); padding: 0 18px; border-radius: var(--rc-pill-radius);
+      border: 1px solid var(--rc-border); background: #fff; cursor: pointer; font-weight: 600;
+    }
+    #quote-calc .rc-btn--primary { background: var(--rc-accent); color: #fff; border-color: var(--rc-accent); }
+
+    #quote-calc .rc-disclaimer { margin-top: 24px; color: var(--rc-muted); font-size: 12px; }
+    #quote-calc .rc-hidden { display: none !important; }
+
+    /* ===== Embellishments (pílulas e rows) ===== */
+    #quote-calc .rc-emb-block { margin-top: 16px; }
+    #quote-calc .rc-emb-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+    #quote-calc .rc-pill-btn {
+      height: var(--rc-btn-h);
+      border-radius: var(--rc-pill-radius);
+      padding: 0 16px;
+      border: none;
+      background: #FF9533;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity .15s ease;
+    }
+    #quote-calc .rc-pill-btn:hover { opacity: .9; }
+
+    #quote-calc .rc-emb-list { display: grid; gap: 12px; margin-top: 12px; }
+    #quote-calc .rc-emb-row {
+      border: 1px solid var(--rc-border);
+      border-radius: 10px;
+      background: #f9fafb;
+      padding: 12px 14px;
+    }
+    #quote-calc .rc-emb-header {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 10px;
+      align-items: center;
+      cursor: pointer;
+    }
+    #quote-calc .rc-emb-num { font-weight: 700; }
+    #quote-calc .rc-emb-name { font-weight: 700; }
+    #quote-calc .rc-emb-delete {
+      border: 1px solid var(--rc-border);
+      background: #fff;
+      border-radius: 8px;
+      height: 28px;
+      padding: 0 10px;
+      cursor: pointer;
+    }
+    #quote-calc .rc-emb-body { margin-top: 12px; }
+    #quote-calc .rc-emb-row.rc-collapsed .rc-emb-body { display: none; }
+  </style>
+
+  <!-- JSON (USD) -->
+  <script type="application/json" id="calc-data">
+  {
+    "currency": "USD",
+    "products": [
+      {
+        "id": "tech-hoodie",
+        "name": "Tech Hoodie",
+        "description": "A technical evolution of the traditional hoodie featuring a distinctive anorak hood and hidden side pockets.",
+        "image": "",
+        "priceBreaks": [
+          { "minQty": 1,  "unit": 19.9 },
+          { "minQty": 25, "unit": 17.6 },
+          { "minQty": 50, "unit": 16.4 },
+          { "minQty": 100,"unit": 15.2 }
+        ]
+      },
+      {
+        "id": "classic-dad-cap",
+        "name": "Classic Dad Cap",
+        "description": "A classic fit Dad Cap with adjustable metal closure and reinforced sweatband.",
+        "image": "",
+        "priceBreaks": [
+          { "minQty": 1,  "unit": 13.9 },
+          { "minQty": 25, "unit": 12.4 },
+          { "minQty": 50, "unit": 11.6 },
+          { "minQty": 100,"unit": 10.9 }
+        ]
+      },
+      {
+        "id": "boxy-tshirt-200",
+        "name": "Boxy T-Shirt 200",
+        "description": "Super compact knit, 200gsm cotton. Boxy fit.",
+        "image": "",
+        "priceBreaks": [
+          { "minQty": 1,  "unit": 17.9 },
+          { "minQty": 25, "unit": 16.2 },
+          { "minQty": 50, "unit": 15.1 },
+          { "minQty": 100,"unit": 13.8 }
+        ]
+      }
+    ],
+    "options": {
+      "colors": [
+        { "id": "bright-white", "label": "Bright White", "add": 0 }
+      ],
+      "artwork": [
+        { "id": "none", "label": "No artwork", "addPerUnit": 0 },
+        { "id": "front-1c", "label": "Front 1-color", "addPerUnit": 0.6 }
+      ],
+      "neckLabel": [
+        { "id": "none", "label": "No label", "addPerUnit": 0 },
+        { "id": "woven", "label": "Woven label", "addPerUnit": 0.3 }
+      ]
+    },
+    "leadTimeRules": [
+      { "minQty": 1, "days": 5 },
+      { "minQty": 25, "days": 12 },
+      { "minQty": 50, "days": 18 },
+      { "minQty": 100,"days": 24 }
+    ],
+    "limits": { "minQty": 1, "maxQty": 1000, "qtyStep": 1 },
+    "cta": { "startDesignUrl": "/studio", "emailSubject": "Quote request – {{productName}}", "emailTo": "" }
+  }
+  </script>
+
+  <div class="rc-grid" aria-live="polite" aria-relevant="all">
+    <section class="rc-section">
+      <h2>Choose product</h2>
+      <div class="rc-product-top">
+        <div class="rc-select-wrap">
+          <select id="product-select" name="product" aria-label="Choose a product"></select>
+        </div>
+        <div id="rc-product-card" class="rc-product-card rc-hidden" role="group" aria-label="Product details">
+          <img id="product-image" alt="" />
+          <div>
+            <div class="rc-product-title" id="product-name">—</div>
+            <p class="rc-product-desc" id="product-desc">—</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rc-section">
+      <h2>Add Customizations</h2>
+      <div class="rc-opts">
+        <div class="rc-opt">
+          <label for="color-select">Garment Color</label>
+          <div class="rc-select-wrap"><select id="color-select" name="color"></select></div>
+        </div>
+        <div class="rc-opt">
+          <label for="artwork-select">Artwork</label>
+          <div class="rc-select-wrap"><select id="artwork-select" name="artwork"></select></div>
+        </div>
+        <div class="rc-opt">
+          <label for="neck-select">Neck Label</label>
+          <div class="rc-select-wrap"><select id="neck-select" name="neckLabel"></select></div>
+        </div>
+      </div>
+
+      <!-- Embellishments (NOVO BLOCO) -->
+      <div class="rc-emb-block" aria-labelledby="rc-embellishments-label">
+        <label id="rc-embellishments-label">Embellishments</label>
+        <div class="rc-emb-pills">
+          <button type="button" id="btn-add-screenprint" class="rc-pill-btn">Add Screen Print</button>
+          <button type="button" id="btn-add-embroidery" class="rc-pill-btn">Add Embroidery</button>
+        </div>
+        <div id="rc-embellishments-list" class="rc-emb-list"></div>
+      </div>
+      <!-- FIM Embellishments -->
+    </section>
+
+    <section class="rc-section">
+      <h2>Order Quantity</h2>
+      <div class="rc-qty-row">
+        <div class="rc-qty-line">
+          <div class="rc-stepper">
+            <button type="button" class="rc-icon-btn" id="qty-dec" aria-label="Decrease quantity">‹</button>
+            <button type="button" class="rc-icon-btn" id="qty-inc" aria-label="Increase quantity">›</button>
+          </div>
+          <input id="qty-range" class="rc-range" type="range" min="1" max="1000" step="1" value="1" aria-label="Quantity slider" />
+        </div>
+
+        <div class="rc-metrics">
+          <div class="rc-metric">
+            <label>Lead time</label>
+            <div class="rc-big" id="lead-time-value">—</div>
+          </div>
+          <div class="rc-metric">
+            <label>Estimated delivery</label>
+            <div class="rc-big" id="delivery-date-value">—</div>
+          </div>
+          <div class="rc-metric">
+            <label>Quantity</label>
+            <input id="qty-input" class="rc-qty-input" type="number" inputmode="numeric" min="1" step="1" value="1" />
+          </div>
+          <div class="rc-metric">
+            <label>Unit cost</label>
+            <div class="rc-big" id="unit-cost-value">—</div>
+          </div>
+          <div class="rc-metric">
+            <label>Subtotal</label>
+            <div class="rc-big" id="subtotal-value">—</div>
+          </div>
+        </div>
+
+        <div class="rc-actions">
+          <button type="button" class="rc-btn" id="email-btn">Send to email</button>
+          <button type="button" class="rc-btn rc-btn--primary" id="design-btn">Start designing</button>
+        </div>
+
+        <p class="rc-disclaimer">
+          Prices are indicative, please upload your artwork in the studio for a final quote. Shipping and duties costs are not included in the calculation.
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <!-- Form de fallback -->
+  <form id="quote-form" class="rc-hidden">
+    <input type="hidden" name="product_id" />
+    <input type="hidden" name="product_name" />
+    <input type="hidden" name="options_json" />
+    <input type="hidden" name="quantity" />
+    <input type="hidden" name="unit_cost" />
+    <input type="hidden" name="subtotal" />
+    <input type="hidden" name="lead_time_days" />
+    <input type="hidden" name="currency" />
+    <input type="hidden" name="estimated_delivery_date" />
+  </form>
+
+  <script>
+    ;(function () {
+      window.RovoLikeCalc = window.RovoLikeCalc || {};
+      function byId(id){return document.getElementById(id);} function clamp(n,a,b){return Math.max(a,Math.min(b,n));}
+      function safeArray(x){return Array.isArray(x)?x:[];} function toNumber(x,f){var n=typeof x==='number'?x:parseFloat(x);return isFinite(n)?n:(f||0);}
+
+      function makeMoneyFormatter(code){code=(code&&typeof code==='string')?code:'USD';try{var fmt=new Intl.NumberFormat(navigator.language||'en-US',{style:'currency',currency:code,maximumFractionDigits:2});return n=>fmt.format(toNumber(n,0));}catch(e){return n=>'$'+toNumber(n,0).toFixed(2);}}
+
+      /* Dias úteis (sem feriados/cutoff) */
+      function isBusinessDay(d){var day=d.getDay(); return day>=1 && day<=5;}
+      function addDays(d,n){var r=new Date(d.getFullYear(),d.getMonth(),d.getDate()); r.setDate(r.getDate()+n); return r;}
+      function nextBusinessDayExclusive(d){var r=addDays(d,1); while(!isBusinessDay(r)) r=addDays(r,1); return r;}
+      function addBusinessDaysExclusive(startDate,businessDays){
+        if(businessDays<=0) return nextBusinessDayExclusive(startDate);
+        var r=nextBusinessDayExclusive(startDate);
+        for(var i=1;i<businessDays;i++){ r=addDays(r,1); while(!isBusinessDay(r)) r=addDays(r,1); }
+        return r;
+      }
+      function formatMMDDYYYY(d){var mm=String(d.getMonth()+1).padStart(2,'0'); var dd=String(d.getDate()).padStart(2,'0'); var yyyy=d.getFullYear(); return mm+'/'+dd+'/'+yyyy;}
+
+      function readConfig(){var n=byId('calc-data');if(!n)return null;try{var t=(n.textContent||'').trim();return t?JSON.parse(t):null;}catch(e){console.warn('Invalid JSON',e);return null;}}
+      function chooseProducts(cfg){var p=safeArray(cfg&&cfg.products);if(!p.length&&cfg&&cfg.product)p=[cfg.product];return p;}
+      function getPriceUnitForQty(b,qty){var a=safeArray(b).slice().sort((x,y)=>toNumber(x.minQty,0)-toNumber(y.minQty,0));var u=toNumber(a.length?a[0].unit:0,0);for(var i=0;i<a.length;i++){if(toNumber(a[i].minQty,0)<=qty)u=toNumber(a[i].unit,u);}return u;}
+      function getLeadTimeDays(r,qty){var a=safeArray(r).slice().sort((x,y)=>toNumber(x.minQty,0)-toNumber(y.minQty,0));var d=a.length?toNumber(a[0].days,0):0;for(var i=0;i<a.length;i++){if(toNumber(a[i].minQty,0)<=qty)d=toNumber(a[i].days,d);}return d;}
+
+      function mount(root){
+        var cfg=readConfig()||{}; var limits=Object.assign({minQty:1,maxQty:1000,qtyStep:1},cfg.limits||{});
+        var products=chooseProducts(cfg); var currency=cfg.currency||'USD'; var fmt=makeMoneyFormatter(currency);
+
+        var productSelect=byId('product-select'), card=byId('rc-product-card'), img=byId('product-image'), name=byId('product-name'), desc=byId('product-desc');
+        var colorSel=byId('color-select'), artSel=byId('artwork-select'), neckSel=byId('neck-select');
+        var qtyInput=byId('qty-input'), qtyRange=byId('qty-range'), qtyInc=byId('qty-inc'), qtyDec=byId('qty-dec');
+        var lead=byId('lead-time-value'), unit=byId('unit-cost-value'), sub=byId('subtotal-value'), delivery=byId('delivery-date-value');
+        var emailBtn=byId('email-btn'), designBtn=byId('design-btn');
+
+        var form=byId('quote-form'); (['product_id','product_name','options_json','quantity','unit_cost','subtotal','lead_time_days','currency','estimated_delivery_date']).forEach(n=>{if(!form.querySelector('input[name="'+n+'"]')){var i=document.createElement('input');i.type='hidden';i.name=n;form.appendChild(i);}});
+
+        var state={
+          products:products,
+          product:products[0]||null,
+          options:{colors:safeArray(cfg.options&&cfg.options.colors),artwork:safeArray(cfg.options&&cfg.options.artwork),neckLabel:safeArray(cfg.options&&cfg.options.neckLabel)},
+          leadTimeRules:safeArray(cfg.leadTimeRules),
+          qty:clamp(toNumber(limits.minQty,1),toNumber(limits.minQty,1),toNumber(limits.maxQty,1000)),
+          limits:limits,
+          currency:currency,
+          cta:Object.assign({startDesignUrl:'#',emailSubject:'Quote request – {{productName}}',emailTo:''},cfg.cta||{}),
+          selectedColor:null, selectedArtwork:null, selectedNeck:null,
+          embellishments:{ order:[], items:{} }
+        };
+
+        function populateSelect(sel,list){sel.innerHTML='';if(!list.length){var o=document.createElement('option');o.value='';o.textContent='No items';sel.appendChild(o);sel.disabled=true;return;} sel.disabled=false;list.forEach((it,idx)=>{var o=document.createElement('option');o.value=it.id||String(idx);o.textContent=it.name||it.label||('Item '+(idx+1));sel.appendChild(o);}); sel.value=sel.options[0].value;}
+        populateSelect(productSelect,state.products);
+        function renderProduct(p){ if(!p){card.classList.add('rc-hidden');return;} card.classList.remove('rc-hidden'); name.textContent=p.name||'—'; desc.textContent=p.description||''; if(p.image){img.src=p.image; img.alt=p.name||'Product image';} else {img.removeAttribute('src'); img.alt='';} }
+        renderProduct(state.product);
+
+        productSelect.addEventListener('change',function(){ var v=this.value; var found=state.products.find((p,idx)=> (p.id&&p.id===v)||(!p.id&&String(idx)===v)); state.product=found||state.products[0]; renderProduct(state.product); recompute(); });
+
+        function ensureOpts(sel,list){sel.innerHTML=''; if(!list.length){var o=document.createElement('option');o.value='';o.textContent='N/A'; sel.appendChild(o); sel.disabled=true; return;} sel.disabled=false; list.forEach((it,idx)=>{var o=document.createElement('option');o.value=it.id||String(idx);o.textContent=it.label||('Option '+(idx+1)); sel.appendChild(o);}); sel.value=list[0].id||sel.options[0].value;}
+        ensureOpts(colorSel,state.options.colors); ensureOpts(artSel,state.options.artwork); ensureOpts(neckSel,state.options.neckLabel);
+
+        function syncSel(){ state.selectedColor=state.options.colors.find(x=>String(x.id||'')===String(colorSel.value||''))||state.options.colors[0]||null;
+                            state.selectedArtwork=state.options.artwork.find(x=>String(x.id||'')===String(artSel.value||''))||state.options.artwork[0]||null;
+                            state.selectedNeck=state.options.neckLabel.find(x=>String(x.id||'')===String(neckSel.value||''))||state.options.neckLabel[0]||null; }
+        syncSel(); colorSel.addEventListener('change',()=>{syncSel();recompute();}); artSel.addEventListener('change',()=>{syncSel();recompute();}); neckSel.addEventListener('change',()=>{syncSel();recompute();});
+
+        qtyInput.min=String(state.limits.minQty); qtyInput.max=String(state.limits.maxQty); qtyInput.step=String(state.limits.qtyStep); qtyInput.value=String(state.qty);
+        qtyRange.min=String(state.limits.minQty); qtyRange.max=String(state.limits.maxQty); qtyRange.step=String(state.limits.qtyStep); qtyRange.value=String(state.qty);
+        function setQty(v){ var val=clamp(toNumber(v,state.qty),toNumber(state.limits.minQty,1),toNumber(state.limits.maxQty,1000)); var step=Math.max(1,toNumber(state.limits.qtyStep,1)); val=Math.round(val/step)*step; state.qty=val; qtyInput.value=String(val); qtyRange.value=String(val); }
+        qtyInc.addEventListener('click',()=>{setQty(state.qty+Math.max(1,toNumber(state.limits.qtyStep,1)));recompute();});
+        qtyDec.addEventListener('click',()=>{setQty(state.qty-Math.max(1,toNumber(state.limits.qtyStep,1)));recompute();});
+        qtyInput.addEventListener('input',()=>{setQty(qtyInput.value);recompute();});
+        qtyRange.addEventListener('input',()=>{setQty(qtyRange.value);recompute();});
+
+        /* ===== Embellishments UI ===== */
+        var embList = byId('rc-embellishments-list');
+        function renumberEmbRows(){
+          var rows = embList.querySelectorAll('.rc-emb-row');
+          rows.forEach(function(row, idx){
+            var n = row.querySelector('.rc-emb-num'); if(n) n.textContent = (idx+1)+'.';
+          });
+        }
+        function getEmbPayload(){
+          var payload = { order: state.embellishments.order.slice(), items: {} };
+          state.embellishments.order.forEach(function(key){
+            var v = state.embellishments.items[key];
+            if (!v) return;
+            if (key === 'screenprint') {
+              payload.items[key] = {
+                sp_colors: v.sp_colors || '1 color',
+                sp_size: v.sp_size || '8x10',
+                sp_extras: v.sp_extras || 'None (Plastisol)'
+              };
+            } else if (key === 'embroidery') {
+              payload.items[key] = {
+                emb_colors: v.emb_colors || '1-3 colors',
+                emb_area: v.emb_area || '25cm2',
+                emb_3d: !!v.emb_3d
+              };
+            }
+          });
+          return payload;
+        }
+        function toggleRow(row, collapsed){
+          if (typeof collapsed === 'boolean') {
+            row.classList.toggle('rc-collapsed', collapsed);
+          } else {
+            row.classList.toggle('rc-collapsed');
+          }
+        }
+        function createScreenPrintRow(){
+          var id = 'emb-row-screenprint';
+          var existing = byId(id); if (existing) return existing;
+          var row = document.createElement('div'); row.className='rc-emb-row'; row.id=id; row.setAttribute('data-method','screenprint');
+
+          var header = document.createElement('div'); header.className='rc-emb-header';
+          var num = document.createElement('span'); num.className='rc-emb-num'; num.textContent='1.';
+          var nameEl = document.createElement('span'); nameEl.className='rc-emb-name'; nameEl.textContent='Screen Print';
+          var del = document.createElement('button'); del.type='button'; del.className='rc-emb-delete'; del.setAttribute('aria-label','Remove Screen Print'); del.textContent='✕';
+          header.appendChild(num); header.appendChild(nameEl); header.appendChild(del);
+
+          var body = document.createElement('div'); body.className='rc-emb-body'; body.id='emb-body-screenprint';
+          var opts = document.createElement('div'); opts.className='rc-opts';
+          var o1 = document.createElement('div'); o1.className='rc-opt';
+          var l1 = document.createElement('label'); l1.setAttribute('for','sp_colors'); l1.textContent='Colors';
+          var w1 = document.createElement('div'); w1.className='rc-select-wrap';
+          var s1 = document.createElement('select'); s1.name='sp_colors'; s1.id='sp_colors';
+          ['1 color','2 colors','3+ colors'].forEach(function(t){ var o=new Option(t,t); s1.add(o); });
+          w1.appendChild(s1); o1.appendChild(l1); o1.appendChild(w1);
+          var o2 = document.createElement('div'); o2.className='rc-opt';
+          var l2 = document.createElement('label'); l2.setAttribute('for','sp_size'); l2.textContent='Print size';
+          var w2 = document.createElement('div'); w2.className='rc-select-wrap';
+          var s2 = document.createElement('select'); s2.name='sp_size'; s2.id='sp_size';
+          ['8x10','10x12','12x14'].forEach(function(t){ var o=new Option(t,t); s2.add(o); });
+          w2.appendChild(s2); o2.appendChild(l2); o2.appendChild(w2);
+          var o3 = document.createElement('div'); o3.className='rc-opt';
+          var l3 = document.createElement('label'); l3.setAttribute('for','sp_extras'); l3.textContent='Extras';
+          var w3 = document.createElement('div'); w3.className='rc-select-wrap';
+          var s3 = document.createElement('select'); s3.name='sp_extras'; s3.id='sp_extras';
+          ['None (Plastisol)','Water-based','Puff'].forEach(function(t){ var o=new Option(t,t); s3.add(o); });
+          w3.appendChild(s3); o3.appendChild(l3); o3.appendChild(w3);
+
+          opts.appendChild(o1); opts.appendChild(o2); opts.appendChild(o3);
+          body.appendChild(opts);
+          row.appendChild(header); row.appendChild(body);
+
+          header.addEventListener('click', function(e){
+            if (e.target === del) return; 
+            toggleRow(row);
+          });
+          del.addEventListener('click', function(){
+            delete state.embellishments.items['screenprint'];
+            state.embellishments.order = state.embellishments.order.filter(function(k){ return k!=='screenprint'; });
+            row.remove(); renumberEmbRows(); recompute();
+          });
+          function sync(){
+            var item = state.embellishments.items['screenprint'] || {};
+            item.sp_colors = s1.value; item.sp_size = s2.value; item.sp_extras = s3.value;
+            state.embellishments.items['screenprint'] = item;
+            recompute();
+          }
+          s1.addEventListener('change', sync); s2.addEventListener('change', sync); s3.addEventListener('change', sync);
+
+          return row;
+        }
+        function createEmbroideryRow(){
+          var id = 'emb-row-embroidery';
+          var existing = byId(id); if (existing) return existing;
+          var row = document.createElement('div'); row.className='rc-emb-row'; row.id=id; row.setAttribute('data-method','embroidery');
+
+          var header = document.createElement('div'); header.className='rc-emb-header';
+          var num = document.createElement('span'); num.className='rc-emb-num'; num.textContent='1.';
+          var nameEl = document.createElement('span'); nameEl.className='rc-emb-name'; nameEl.textContent='Embroidery';
+          var del = document.createElement('button'); del.type='button'; del.className='rc-emb-delete'; del.setAttribute('aria-label','Remove Embroidery'); del.textContent='✕';
+          header.appendChild(num); header.appendChild(nameEl); header.appendChild(del);
+
+          var body = document.createElement('div'); body.className='rc-emb-body'; body.id='emb-body-embroidery';
+          var opts = document.createElement('div'); opts.className='rc-opts';
+          var o1 = document.createElement('div'); o1.className='rc-opt';
+          var l1 = document.createElement('label'); l1.setAttribute('for','emb_colors'); l1.textContent='Colors';
+          var w1 = document.createElement('div'); w1.className='rc-select-wrap';
+          var s1 = document.createElement('select'); s1.name='emb_colors'; s1.id='emb_colors';
+          ['1-3 colors','4-6 colors','7+ colors'].forEach(function(t){ var o=new Option(t,t); s1.add(o); });
+          w1.appendChild(s1); o1.appendChild(l1); o1.appendChild(w1);
+          var o2 = document.createElement('div'); o2.className='rc-opt';
+          var l2 = document.createElement('label'); l2.setAttribute('for','emb_area'); l2.textContent='Area';
+          var w2 = document.createElement('div'); w2.className='rc-select-wrap';
+          var s2 = document.createElement('select'); s2.name='emb_area'; s2.id='emb_area';
+          ['25cm2','50cm2','75cm2'].forEach(function(t){ var o=new Option(t,t); s2.add(o); });
+          w2.appendChild(s2); o2.appendChild(l2); o2.appendChild(w2);
+          var o3 = document.createElement('div'); o3.className='rc-opt';
+          var l3 = document.createElement('label'); l3.textContent='3D';
+          var cb = document.createElement('input'); cb.type='checkbox'; cb.name='emb_3d'; cb.id='emb_3d'; cb.style.marginRight='8px';
+          var wrap3 = document.createElement('div'); wrap3.style.display='flex'; wrap3.style.alignItems='center'; wrap3.appendChild(cb); wrap3.appendChild(l3);
+          o3.appendChild(wrap3);
+
+          opts.appendChild(o1); opts.appendChild(o2); opts.appendChild(o3);
+          body.appendChild(opts);
+          row.appendChild(header); row.appendChild(body);
+
+          header.addEventListener('click', function(e){
+            if (e.target === del) return;
+            toggleRow(row);
+          });
+          del.addEventListener('click', function(){
+            delete state.embellishments.items['embroidery'];
+            state.embellishments.order = state.embellishments.order.filter(function(k){ return k!=='embroidery'; });
+            row.remove(); renumberEmbRows(); recompute();
+          });
+          function sync(){
+            var item = state.embellishments.items['embroidery'] || {};
+            item.emb_colors = s1.value; item.emb_area = s2.value; item.emb_3d = !!cb.checked;
+            state.embellishments.items['embroidery'] = item;
+            recompute();
+          }
+          s1.addEventListener('change', sync); s2.addEventListener('change', sync); cb.addEventListener('change', sync);
+
+          return row;
+        }
+        function addOrToggle(method){
+          if (method === 'screenprint') {
+            if (state.embellishments.items['screenprint']) {
+              var row = byId('emb-row-screenprint'); if (row) toggleRow(row);
+              return;
+            }
+            var row = createScreenPrintRow();
+            embList.appendChild(row);
+            state.embellishments.order.push('screenprint');
+            state.embellishments.items['screenprint'] = { sp_colors:'1 color', sp_size:'8x10', sp_extras:'None (Plastisol)' };
+            renumberEmbRows(); recompute();
+          } else if (method === 'embroidery') {
+            if (state.embellishments.items['embroidery']) {
+              var row2 = byId('emb-row-embroidery'); if (row2) toggleRow(row2);
+              return;
+            }
+            var row2 = createEmbroideryRow();
+            embList.appendChild(row2);
+            state.embellishments.order.push('embroidery');
+            state.embellishments.items['embroidery'] = { emb_colors:'1-3 colors', emb_area:'25cm2', emb_3d:false };
+            renumberEmbRows(); recompute();
+          }
+        }
+        byId('btn-add-screenprint').addEventListener('click', function(){ addOrToggle('screenprint'); });
+        byId('btn-add-embroidery').addEventListener('click', function(){ addOrToggle('embroidery'); });
+
+        /* ===== /Embellishments UI ===== */
+
+        function setForm(n,v){var el=form.querySelector('input[name="'+n+'"]'); if(el) el.value=v;}
+        function serializeOptions(){
+          return {
+            color:state.selectedColor?{id:state.selectedColor.id,label:state.selectedColor.label}:null,
+            artwork:state.selectedArtwork?{id:state.selectedArtwork.id,label:state.selectedArtwork.label,addPerUnit:toNumber(state.selectedArtwork.addPerUnit,0)}:null,
+            neckLabel:state.selectedNeck?{id:state.selectedNeck.id,label:state.selectedNeck.label,addPerUnit:toNumber(state.selectedNeck.addPerUnit,0)}:null,
+            embellishments:getEmbPayload()
+          };
+        }
+
+        function recompute(){
+          var p=state.product||{}, qty=state.qty;
+          var base=getPriceUnitForQty(safeArray(p.priceBreaks),qty);
+          var add=0; if(state.selectedArtwork) add+=toNumber(state.selectedArtwork.addPerUnit,0);
+          if(state.selectedNeck) add+=toNumber(state.selectedNeck.addPerUnit,0);
+          if(state.selectedColor&&typeof state.selectedColor.add!=='undefined') add+=toNumber(state.selectedColor.add,0);
+          var unitCost=base+add;
+
+          var subtotal=unitCost*qty;
+          var leadDays=getLeadTimeDays(state.leadTimeRules,qty);
+          var deliveryDate=addBusinessDaysExclusive(new Date(),leadDays);
+          var deliveryStr=formatMMDDYYYY(deliveryDate);
+
+          lead.textContent=(leadDays>0?(leadDays+' days'):'—');
+          unit.textContent=fmt(unitCost);
+          sub.textContent=fmt(subtotal);
+          delivery.textContent=deliveryStr;
+
+          setForm('product_id',p.id||''); setForm('product_name',p.name||''); setForm('options_json',JSON.stringify(serializeOptions()));
+          setForm('quantity',String(qty)); setForm('unit_cost',unitCost.toFixed(2)); setForm('subtotal',subtotal.toFixed(2));
+          setForm('lead_time_days',String(leadDays)); setForm('currency',state.currency); setForm('estimated_delivery_date',deliveryStr);
+        }
+
+        function getEmailSubject(n){return (state.cta.emailSubject||'Quote request').replace('{{productName}}',n||'');}
+        function buildEmailBody(calc,fmt){
+          var lines=[]; lines.push('Product: '+calc.productName+' ('+calc.productId+')'); lines.push('Quantity: '+calc.qty);
+          var o=calc.options||{}; if(o.color)lines.push('Color: '+(o.color.label||o.color.id)); if(o.artwork)lines.push('Artwork: '+(o.artwork.label||o.artwork.id)); if(o.neckLabel)lines.push('Neck Label: '+(o.neckLabel.label||o.neckLabel.id));
+          lines.push(''); lines.push('Unit cost: '+fmt(calc.unitCost)); lines.push('Subtotal: '+fmt(calc.subtotal)); lines.push('Lead time: '+calc.leadTimeDays+' days'); lines.push('Estimated delivery: '+calc.deliveryDate);
+          lines.push(''); lines.push('Currency: '+state.currency); return lines.join('%0A');
+        }
+
+        emailBtn.addEventListener('click',function(){
+          if(form.requestSubmit) form.requestSubmit(); else if(form.submit) form.submit();
+          var p=state.product||{}, qty=state.qty;
+          var base=getPriceUnitForQty(safeArray(p.priceBreaks),qty);
+          var add=0; if(state.selectedArtwork) add+=toNumber(state.selectedArtwork.addPerUnit,0); if(state.selectedNeck) add+=toNumber(state.selectedNeck.addPerUnit,0); if(state.selectedColor&&typeof state.selectedColor.add!=='undefined') add+=toNumber(state.selectedColor.add,0);
+          var unitCost=base+add; var subtotal=unitCost*qty; var leadDays=getLeadTimeDays(state.leadTimeRules,qty); var deliveryDate=addBusinessDaysExclusive(new Date(),leadDays);
+          var subject=encodeURIComponent(getEmailSubject(p.name||'')); var body=buildEmailBody({productId:p.id||'',productName:p.name||'',qty:qty,unitCost:unitCost,subtotal:subtotal,leadTimeDays:leadDays,deliveryDate:formatMMDDYYYY(deliveryDate),options:serializeOptions()}, makeMoneyFormatter(state.currency)); var to=(state.cta.emailTo||'').trim(); var href='mailto:'+encodeURIComponent(to)+'?subject='+subject+'&body='+body; window.open(href,'_blank');
+        });
+
+        designBtn.addEventListener('click',function(){
+          var url=(state.cta&&state.cta.startDesignUrl)||'#'; if(url&&url!=='#'){var q=new URLSearchParams();
+            if(state.product&&state.product.id) q.set('productId',state.product.id);
+            q.set('qty',String(state.qty));
+            if(state.selectedColor&&state.selectedColor.id) q.set('color',state.selectedColor.id);
+            if(state.selectedArtwork&&state.selectedArtwork.id) q.set('artwork',state.selectedArtwork.id);
+            if(state.selectedNeck&&state.selectedNeck.id) q.set('neckLabel',state.selectedNeck.id);
+            var j=url.indexOf('?')===-1?'?':'&'; try{window.location.href=url+j+q.toString();}catch(e){window.location.assign(url);} }
+        });
+
+        recompute();
+      }
+
+      var root=document.getElementById('quote-calc'); if(root) mount(root); window.RovoLikeCalc.mount=mount;
+    })();
+  </script>
+</div>
+
+
+
+
+

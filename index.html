@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bioblanks Quote Calculator - Development</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f4f5f6;
+    }
+    
+    .dev-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .dev-header {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .dev-header h1 {
+      margin: 0 0 10px 0;
+      color: #111827;
+    }
+    
+    .dev-header p {
+      margin: 0;
+      color: #6b7280;
+    }
+    
+    .status {
+      display: inline-block;
+      padding: 4px 8px;
+      background: #10b981;
+      color: white;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="dev-container">
+    <div class="dev-header">
+      <h1>
+        Bioblanks Quote Calculator 
+        <span class="status">Development Mode</span>
+      </h1>
+      <p>
+        Testing micro-frontend with mock data. 
+        Open DevTools Console to see events and debug info.
+      </p>
+    </div>
+
+    <!-- Embed HTML (copiado do embed.html anterior) -->
+    <div id="quote-calc" data-form-id="">
+      <style>
+        /* =========================
+           Estilos escopados (#quote-calc)
+           Sem "Development costs", métricas em 1 linha no desktop
+           + Bloco de Embellishments (pílulas + rows)
+           ========================= */
+        #quote-calc, #quote-calc * { box-sizing: border-box; }
+        #quote-calc {
+          --rc-font: system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, sans-serif;
+          --rc-bg: #f4f5f6;
+          --rc-card: #ffffff;
+          --rc-text: #0f172a;
+          --rc-muted: #6b7280;
+          --rc-border: #e5e7eb;
+          --rc-accent: #111827;
+          --rc-focus-ring: 2px solid #111827;
+          --rc-radius: 12px;
+          --rc-space-2: 8px;
+          --rc-space-3: 12px;
+          --rc-space-4: 16px;
+          --rc-space-5: 20px;
+          --rc-space-6: 24px;
+          --rc-space-8: 32px;
+          --rc-pill-radius: 20px;
+          --rc-btn-h: 44px;
+        }
+
+        #quote-calc {
+          font-family: var(--rc-font);
+          background: var(--rc-bg);
+          padding: var(--rc-space-8);
+          border-radius: var(--rc-radius);
+          margin: 0 auto;
+          color: var(--rc-text);
+          line-height: 1.6;
+        }
+
+        /* Estrutura principal */
+        #quote-calc .rc-main {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: var(--rc-space-8);
+          max-width: 900px;
+          margin: 0 auto;
+        }
+
+        /* Card do produto */
+        #quote-calc .rc-product-card {
+          background: var(--rc-card);
+          border-radius: var(--rc-radius);
+          padding: var(--rc-space-6);
+          display: none;
+          border: 1px solid var(--rc-border);
+        }
+
+        #quote-calc .rc-product-info {
+          display: grid;
+          grid-template-columns: 120px 1fr;
+          gap: var(--rc-space-4);
+          align-items: start;
+        }
+
+        #quote-calc .rc-product-image {
+          width: 120px;
+          height: 120px;
+          object-fit: cover;
+          border-radius: var(--rc-radius);
+          border: 1px solid var(--rc-border);
+        }
+
+        #quote-calc .rc-product-details h3 {
+          margin: 0 0 var(--rc-space-2) 0;
+          font-size: 18px;
+          font-weight: 600;
+          color: var(--rc-text);
+        }
+
+        #quote-calc .rc-product-details p {
+          margin: 0;
+          color: var(--rc-muted);
+          font-size: 14px;
+        }
+
+        /* Seções */
+        #quote-calc .rc-section {
+          background: var(--rc-card);
+          border-radius: var(--rc-radius);
+          padding: var(--rc-space-6);
+          border: 1px solid var(--rc-border);
+        }
+
+        #quote-calc .rc-section h2 {
+          margin: 0 0 var(--rc-space-5) 0;
+          font-size: 20px;
+          font-weight: 600;
+          color: var(--rc-text);
+        }
+
+        /* Options grid */
+        #quote-calc .rc-opts {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: var(--rc-space-4);
+        }
+
+        #quote-calc .rc-opt label {
+          display: block;
+          font-weight: 500;
+          font-size: 14px;
+          color: var(--rc-text);
+          margin-bottom: var(--rc-space-2);
+        }
+
+        #quote-calc .rc-opt select {
+          width: 100%;
+          padding: var(--rc-space-3);
+          border: 1px solid var(--rc-border);
+          border-radius: 6px;
+          font-size: 14px;
+          background: white;
+          color: var(--rc-text);
+        }
+
+        #quote-calc .rc-opt select:focus {
+          outline: var(--rc-focus-ring);
+          border-color: var(--rc-accent);
+        }
+
+        /* Quantity controls */
+        #quote-calc .rc-qty-controls {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: var(--rc-space-4);
+          align-items: end;
+        }
+
+        #quote-calc .rc-qty-stepper {
+          display: flex;
+          align-items: center;
+          gap: var(--rc-space-2);
+        }
+
+        #quote-calc .rc-qty-btn {
+          width: 36px;
+          height: 36px;
+          border: 1px solid var(--rc-border);
+          background: white;
+          border-radius: 6px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          font-weight: 600;
+          color: var(--rc-text);
+        }
+
+        #quote-calc .rc-qty-btn:hover {
+          background: var(--rc-card);
+        }
+
+        #quote-calc .rc-qty-input {
+          width: 80px;
+          padding: var(--rc-space-2);
+          border: 1px solid var(--rc-border);
+          border-radius: 6px;
+          text-align: center;
+          font-size: 14px;
+        }
+
+        #quote-calc .rc-qty-slider-wrapper label {
+          display: block;
+          font-weight: 500;
+          font-size: 14px;
+          color: var(--rc-text);
+          margin-bottom: var(--rc-space-2);
+        }
+
+        #quote-calc .rc-qty-slider {
+          width: 100%;
+          height: 6px;
+          border-radius: 3px;
+          background: var(--rc-border);
+          outline: none;
+          appearance: none;
+        }
+
+        #quote-calc .rc-qty-slider::-webkit-slider-thumb {
+          appearance: none;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: var(--rc-accent);
+          cursor: pointer;
+        }
+
+        /* Embellishments */
+        #quote-calc .rc-emb-buttons {
+          display: flex;
+          gap: var(--rc-space-3);
+          margin-bottom: var(--rc-space-4);
+        }
+
+        #quote-calc .rc-pill-btn {
+          padding: var(--rc-space-2) var(--rc-space-4);
+          background: #FF9533;
+          color: white;
+          border: none;
+          border-radius: var(--rc-pill-radius);
+          font-size: 14px;
+          font-weight: 500;
+          cursor: pointer;
+          height: var(--rc-btn-h);
+          display: flex;
+          align-items: center;
+        }
+
+        #quote-calc .rc-pill-btn:hover {
+          opacity: 0.9;
+        }
+
+        /* Metrics */
+        #quote-calc .rc-metrics {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+          gap: var(--rc-space-4);
+        }
+
+        #quote-calc .rc-metric {
+          text-align: center;
+        }
+
+        #quote-calc .rc-metric label {
+          display: block;
+          font-size: 12px;
+          font-weight: 500;
+          color: var(--rc-muted);
+          margin-bottom: var(--rc-space-1);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        #quote-calc .rc-metric .value {
+          font-size: 18px;
+          font-weight: 600;
+          color: var(--rc-text);
+        }
+
+        /* Actions */
+        #quote-calc .rc-actions {
+          display: flex;
+          gap: var(--rc-space-3);
+          flex-wrap: wrap;
+        }
+
+        #quote-calc .rc-btn {
+          padding: var(--rc-space-3) var(--rc-space-5);
+          background: var(--rc-accent);
+          color: white;
+          border: none;
+          border-radius: 6px;
+          font-size: 14px;
+          font-weight: 500;
+          cursor: pointer;
+          height: var(--rc-btn-h);
+          flex: 1;
+          min-width: 140px;
+        }
+
+        #quote-calc .rc-btn:hover {
+          opacity: 0.9;
+        }
+
+        #quote-calc .rc-btn.secondary {
+          background: white;
+          color: var(--rc-accent);
+          border: 1px solid var(--rc-border);
+        }
+
+        /* Disclaimer */
+        #quote-calc .rc-disclaimer {
+          font-size: 12px;
+          color: var(--rc-muted);
+          text-align: center;
+          margin-top: var(--rc-space-6);
+          line-height: 1.4;
+        }
+
+        /* Responsive - métricas em 1 linha no desktop */
+        @media (min-width: 1024px) {
+          #quote-calc .rc-metrics {
+            grid-template-columns: repeat(5, minmax(120px, 1fr));
+            gap: 16px;
+            align-items: end;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            white-space: nowrap;
+          }
+
+          #quote-calc .rc-metric label {
+            font-size: 11px;
+            line-height: 1.2;
+          }
+
+          #quote-calc .rc-metric .value {
+            font-size: 16px;
+            font-weight: 600;
+          }
+        }
+
+        @media (max-width: 768px) {
+          #quote-calc {
+            padding: var(--rc-space-4);
+          }
+
+          #quote-calc .rc-product-info {
+            grid-template-columns: 1fr;
+            text-align: center;
+          }
+
+          #quote-calc .rc-product-image {
+            justify-self: center;
+          }
+
+          #quote-calc .rc-qty-controls {
+            grid-template-columns: 1fr;
+          }
+
+          #quote-calc .rc-actions {
+            flex-direction: column;
+          }
+        }
+      </style>
+
+      <div class="rc-main">
+        <!-- Produto -->
+        <section class="rc-section">
+          <h2>Choose product</h2>
+          <div class="rc-opt">
+            <label for="rc-product-select">Product</label>
+            <select id="rc-product-select" required>
+              <option value="">Select a product...</option>
+            </select>
+          </div>
+          
+          <div class="rc-product-card">
+            <div class="rc-product-info">
+              <img id="rc-product-image" class="rc-product-image" src="" alt="" />
+              <div class="rc-product-details">
+                <h3 id="rc-product-name"></h3>
+                <p id="rc-product-desc"></p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Customizações -->
+        <section class="rc-section">
+          <h2>Add Customizations</h2>
+          <div class="rc-opts">
+            <div class="rc-opt">
+              <label for="rc-color-select">Garment Color</label>
+              <select id="rc-color-select" required>
+                <option value="">Select color...</option>
+              </select>
+            </div>
+            <div class="rc-opt">
+              <label for="rc-artwork-select">Artwork</label>
+              <select id="rc-artwork-select" required>
+                <option value="">Select artwork...</option>
+              </select>
+            </div>
+            <div class="rc-opt">
+              <label for="rc-neck-label-select">Neck Label</label>
+              <select id="rc-neck-label-select" required>
+                <option value="">Select neck label...</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Embellishments -->
+          <div style="margin-top: var(--rc-space-6);">
+            <label style="display: block; font-weight: 500; font-size: 14px; color: var(--rc-text); margin-bottom: var(--rc-space-3);">Embellishments</label>
+            
+            <div class="rc-emb-buttons">
+              <button type="button" id="btn-add-screenprint" class="rc-pill-btn">Add Screen Print</button>
+              <button type="button" id="btn-add-embroidery" class="rc-pill-btn">Add Embroidery</button>
+            </div>
+            
+            <div id="rc-embellishments-list"></div>
+          </div>
+        </section>
+
+        <!-- Quantidade -->
+        <section class="rc-section">
+          <h2>Order Quantity</h2>
+          <div class="rc-qty-controls">
+            <div>
+              <label style="display: block; font-weight: 500; font-size: 14px; color: var(--rc-text); margin-bottom: var(--rc-space-2);">Quantity</label>
+              <div class="rc-qty-stepper">
+                <button type="button" id="rc-qty-dec" class="rc-qty-btn">−</button>
+                <input type="number" id="rc-quantity" class="rc-qty-input" min="1" max="1000" value="1" />
+                <button type="button" id="rc-qty-inc" class="rc-qty-btn">+</button>
+              </div>
+            </div>
+            
+            <div class="rc-qty-slider-wrapper">
+              <label>Quick Select</label>
+              <input type="range" id="rc-quantity-slider" class="rc-qty-slider" min="1" max="1000" value="1" />
+            </div>
+          </div>
+        </section>
+
+        <!-- Métricas -->
+        <section class="rc-section">
+          <div class="rc-metrics">
+            <div class="rc-metric">
+              <label>Lead time</label>
+              <div id="rc-lead-time-value" class="value">5 business days</div>
+            </div>
+            <div class="rc-metric">
+              <label>Estimated delivery</label>
+              <div id="rc-delivery-date-value" class="value">--</div>
+            </div>
+            <div class="rc-metric">
+              <label>Quantity</label>
+              <div id="rc-quantity-value" class="value">1</div>
+            </div>
+            <div class="rc-metric">
+              <label>Unit cost</label>
+              <div id="rc-unit-cost-value" class="value">$0.00</div>
+            </div>
+            <div class="rc-metric">
+              <label>Subtotal</label>
+              <div id="rc-subtotal-value" class="value">$0.00</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Actions -->
+        <section class="rc-section">
+          <div class="rc-actions">
+            <button type="button" id="rc-send-email" class="rc-btn">Send to email</button>
+            <button type="button" id="rc-start-design" class="rc-btn secondary">Start designing</button>
+          </div>
+        </section>
+
+        <!-- Disclaimer -->
+        <div class="rc-disclaimer">
+          Prices are estimates and may vary based on final specifications. 
+          Lead times exclude shipping and are calculated from artwork approval.
+        </div>
+      </div>
+
+      <!-- Hidden form (Webflow submission) -->
+      <form style="display: none;">
+        <input type="hidden" name="product_id" />
+        <input type="hidden" name="product_name" />
+        <input type="hidden" name="quantity" />
+        <input type="hidden" name="color" />
+        <input type="hidden" name="artwork" />
+        <input type="hidden" name="neck_label" />
+        <input type="hidden" name="unit_cost" />
+        <input type="hidden" name="subtotal" />
+        <input type="hidden" name="lead_time" />
+        <input type="hidden" name="estimated_delivery_date" />
+        <input type="hidden" name="options_json" />
+      </form>
+    </div>
+  </div>
+
+  <!-- Carregar o módulo -->
+  <script type="module" src="/src/loader.ts"></script>
+</body>
+</html>
