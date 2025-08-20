@@ -370,8 +370,8 @@
         #quote-calc .nl-tile {
           border-radius: 12px;
           border: 1px solid var(--rc-border);
-          background: #A3A39D;
-          color: #A3A39D;
+          background: #f3f4f6;
+          color: #111827;
           padding: 12px 16px;
           display: flex; 
           flex-direction: column; 
@@ -383,14 +383,14 @@
           flex-shrink: 0;
         }
         #quote-calc .nl-tile:hover { 
-          background: #909089; 
-          color: #909089;
+          background: #e5e7eb; 
+          border-color: #d1d5db;
         }
         #quote-calc .nl-tile--active {
-          background: #A3A39D !important; 
+          background: #111827 !important; 
           color: #ffffff !important; 
-          border-color: #A3A39D; 
-          box-shadow: 0 0 0 2px rgba(163, 163, 157, 0.3);
+          border-color: #111827; 
+          box-shadow: 0 0 0 2px rgba(17, 24, 39, 0.2);
         }
         #quote-calc .nl-rect {
           width: 56px; height: 32px; border-radius:6px;
@@ -413,6 +413,7 @@
           border-color: #ffffff;
           border-style: solid;
           box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+          background: rgba(255,255,255,0.9);
         }
       </style>
 
@@ -665,7 +666,11 @@
             <div class="nl-actions">
               <button type="button" class="nl-icon-btn" id="nl-collapse" aria-label="Collapse/Expand">−</button>
               <button type="button" class="nl-icon-btn nl-tooltip" id="nl-help" data-tip="Escolha o tipo (No label/Woven) e o tamanho do retângulo. Este campo não altera o preço agora.">?</button>
-              <button type="button" class="nl-icon-btn" id="nl-reset" aria-label="Clear neck label">🗑</button>
+                                <button type="button" class="nl-icon-btn" id="nl-reset" aria-label="Clear neck label">
+                    <svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px;">
+                      <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                    </svg>
+                  </button>
             </div>
           </div>
           <div class="nl-body" id="nl-body">
