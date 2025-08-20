@@ -103,10 +103,6 @@
           --rc-btn-h: 44px;
           --rc-input-h: 40px;
           --rc-pill-radius: 9999px;
-
-          /* Cores dos botões-pill (pedido) */
-          --rc-pill-on: #2B2A2A;   /* ativo: preto da marca */
-          --rc-pill-off: #B3B3B3;  /* inativo: cinza com texto branco */
         }
 
         #quote-calc {
@@ -302,77 +298,6 @@
         }
         #quote-calc .rc-color-label { font-size: 13px; font-weight: 600; color: #111827; }
         #quote-calc .rc-color-extra { font-size: 12px; color: var(--rc-muted); }
-
-        /* ===== Dropdown custom de Cor ===== */
-        #quote-calc .rc-dd-wrap { position: relative; }
-        #quote-calc .rc-dd-btn {
-          width: 100%; height: var(--rc-input-h);
-          display: flex; align-items: center; justify-content: space-between; gap: 10px;
-          border-radius: 10px; border: 1px solid var(--rc-border);
-          background: #f3f4f6; padding: 0 12px; cursor: pointer; font-size: 14px;
-        }
-        #quote-calc .rc-dd-left { display: inline-flex; align-items: center; gap: 10px; }
-        #quote-calc .rc-dd-menu {
-          position: absolute; z-index: 40; top: calc(100% + 6px); left: 0; right: 0;
-          max-height: 280px; overflow: auto; background: #fff;
-          border: 1px solid var(--rc-border); border-radius: 12px;
-          box-shadow: 0 12px 24px rgba(0,0,0,.08);
-          padding: 6px; display: none;
-          /* Permite scroll com roda do mouse em todas plataformas */
-          -webkit-overflow-scrolling: touch;
-          overscroll-behavior: contain;
-        }
-        #quote-calc .rc-dd-menu[aria-hidden="false"] { display: block; }
-        #quote-calc .rc-dd-item {
-          display: flex; align-items: center; gap: 10px;
-          height: 36px; padding: 0 10px; border-radius: 8px; cursor: pointer;
-        }
-        #quote-calc .rc-dd-item[aria-selected="true"] { background: #f3f4f6; }
-
-        /* ===== Neck Label (seção separada) ===== */
-        #quote-calc .nl-head {
-          display:flex; align-items:center; justify-content: space-between; margin-bottom: 12px;
-        }
-        #quote-calc .nl-title { font-weight: 700; font-size: 18px; }
-        #quote-calc .nl-actions { display:flex; gap:8px; align-items:center; }
-        #quote-calc .nl-icon-btn {
-          width:28px; height:28px; border-radius:9999px; border:1px solid var(--rc-border);
-          background:#fff; display:grid; place-items:center; cursor:pointer; font-size:14px;
-        }
-        #quote-calc .nl-tooltip {
-          position:relative;
-        }
-        #quote-calc .nl-tooltip:hover::after, #quote-calc .nl-tooltip:focus-visible::after {
-          content: attr(data-tip);
-          position:absolute; top: 110%; right: 0;
-          background:#111; color:#fff; font-size:12px; padding:6px 8px; border-radius:6px; white-space:nowrap;
-          box-shadow: 0 6px 16px rgba(0,0,0,.18);
-        }
-
-        #quote-calc .nl-body { margin-top: 8px; }
-        #quote-calc .nl-tiles {
-          display:grid; gap:12px;
-          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        }
-        #quote-calc .nl-tile {
-          border-radius: 14px;
-          border: 1px solid var(--rc-border);
-          background: #f3f4f6;
-          padding: 14px 12px;
-          display:flex; flex-direction:column; align-items:center; gap:10px;
-          cursor:pointer;
-          transition: box-shadow .15s ease, background .15s ease, border-color .15s ease;
-        }
-        #quote-calc .nl-tile:hover { background:#eef0f3; }
-        #quote-calc .nl-tile--active {
-          background:#fff; border-color:#111827; box-shadow: 0 0 0 2px #1118270f;
-        }
-        #quote-calc .nl-rect {
-          width: 56px; height: 32px; border-radius:6px;
-          background:#fff; border:2px dashed #111; /* desenho simplificado do retângulo */
-        }
-        #quote-calc .nl-square { width: 36px; height: 36px; border-radius:6px; background:#fff; border:2px dashed #111; }
-        #quote-calc .nl-label { font-size: 13px; color:#374151; }
       </style>
 
       <!-- JSON (USD) -->
@@ -549,26 +474,24 @@
         <section class="rc-section">
           <h2>Add Customizations</h2>
           <div class="rc-opts">
-            <!-- Garment Color -->
+            <!-- CORES: pílulas/swatches -->
             <div class="rc-opt">
-              <label for="color-dd-btn">Garment Color</label>
-              <div class="rc-dd-wrap">
-                <button type="button" id="color-dd-btn" class="rc-dd-btn" aria-haspopup="listbox" aria-expanded="false">
-                  <span class="rc-dd-left"><span class="rc-swatch" id="color-dd-swatch"></span><span id="color-dd-label">Select a color</span></span>
-                  <span>▾</span>
-                </button>
-                <div id="color-dd-menu" class="rc-dd-menu" role="listbox" aria-hidden="true"></div>
+              <label for="color-pills">Garment Color</label>
+              <div id="color-pills" class="rc-color-pills" role="listbox" aria-label="Garment Color"></div>
+              <!-- fallback invisível -->
+              <div class="rc-select-wrap rc-hidden">
+                <select id="color-select" name="color" aria-hidden="true"></select>
               </div>
-              <select id="color-select" name="color" class="rc-hidden" aria-hidden="true"></select>
             </div>
 
             <div class="rc-opt">
               <label for="artwork-select">Artwork</label>
               <div class="rc-select-wrap"><select id="artwork-select" name="artwork"></select></div>
             </div>
-
-            <!-- Espaço "vazio" para manter a grade 3 colunas no desktop -->
-            <div class="rc-opt rc-hidden" aria-hidden="true"></div>
+            <div class="rc-opt">
+              <label for="neck-select">Neck Label</label>
+              <div class="rc-select-wrap"><select id="neck-select" name="neckLabel"></select></div>
+            </div>
           </div>
 
           <!-- Embellishments -->
@@ -577,40 +500,10 @@
             <div class="rc-emb-pills">
               <button type="button" id="btn-add-screenprint" class="rc-pill-btn">Add Screen Print</button>
               <button type="button" id="btn-add-embroidery" class="rc-pill-btn">Add Embroidery</button>
-              <button type="button" id="btn-add-puff" class="rc-pill-btn">Puff Print</button>
-              <button type="button" id="btn-add-distress" class="rc-pill-btn">Add Distressing</button>
-              <button type="button" id="btn-add-labels" class="rc-pill-btn">Custom Labels</button>
-              <button type="button" id="btn-add-dye" class="rc-pill-btn">Custom Dye</button>
             </div>
             <div id="rc-embellishments-list" class="rc-emb-list"></div>
           </div>
           <!-- /Embellishments -->
-
-        </section>
-
-        <!-- ===== Nova seção separada: Neck Label ===== -->
-        <section class="rc-section" id="nl-section">
-          <div class="nl-head">
-            <div class="nl-title">Neck Label</div>
-            <div class="nl-actions">
-              <button type="button" class="nl-icon-btn" id="nl-collapse" aria-label="Collapse/Expand">−</button>
-              <button type="button" class="nl-icon-btn nl-tooltip" id="nl-help" data-tip="Escolha o tipo (No label/Woven) e o tamanho do retângulo. Este campo não altera o preço agora.">?</button>
-              <button type="button" class="nl-icon-btn" id="nl-reset" aria-label="Clear neck label">🗑</button>
-            </div>
-          </div>
-          <div class="nl-body" id="nl-body">
-            <!-- tipo simples: No label / Woven -->
-            <div class="rc-opts" style="margin-bottom:12px">
-              <div class="rc-opt">
-                <label for="neck-select">Type</label>
-                <div class="rc-select-wrap"><select id="neck-select" name="neckLabel"></select></div>
-              </div>
-            </div>
-            <!-- tiles de tamanho -->
-            <div class="nl-tiles" id="nl-tiles">
-              <!-- tiles gerados via JS para manter consistência -->
-            </div>
-          </div>
         </section>
 
         <section class="rc-section">
@@ -702,12 +595,8 @@
             var products=chooseProducts(cfg); var currency=cfg.currency||'USD'; var fmt=makeMoneyFormatter(currency);
 
             var productSelect=byId('product-select'), card=byId('rc-product-card'), img=byId('product-image'), name=byId('product-name'), desc=byId('product-desc');
-
-            var colorSelectHidden=byId('color-select');
-            var colorBtn=byId('color-dd-btn'), colorMenu=byId('color-dd-menu'), colorLabel=byId('color-dd-label'), colorSwatch=byId('color-dd-swatch');
-
-            var artSel=byId('artwork-select'), neckSel=byId('neck-select');
-            var nlTiles=byId('nl-tiles'), nlBody=byId('nl-body'), nlCollapse=byId('nl-collapse'), nlReset=byId('nl-reset');
+            var colorSel=byId('color-select'), artSel=byId('artwork-select'), neckSel=byId('neck-select');
+            var colorPills=byId('color-pills');
             var qtyInput=byId('qty-input'), qtyRange=byId('qty-range'), qtyInc=byId('qty-inc'), qtyDec=byId('qty-dec');
             var lead=byId('lead-time-value'), unit=byId('unit-cost-value'), sub=byId('subtotal-value'), delivery=byId('delivery-date-value');
             var emailBtn=byId('email-btn'), designBtn=byId('design-btn');
@@ -724,7 +613,6 @@
               currency:currency,
               cta:Object.assign({startDesignUrl:'#',emailSubject:'Quote request – {{productName}}',emailTo:''},cfg.cta||{}),
               selectedColor:null, selectedArtwork:null, selectedNeck:null,
-              neckLabelSize:null,          // string do tile selecionado
               embellishments:{ order:[], items:{} }
             };
 
@@ -741,118 +629,74 @@
             ensureOpts(neckSel,state.options.neckLabel);
 
             // ========== Color Pills ==========
-            function buildColorDropdown(){
-              colorMenu.innerHTML = ''; colorSelectHidden.innerHTML = '';
+            function renderColorPills() {
+              colorPills.innerHTML = '';
               var list = state.options.colors || [];
+              if (!list.length) return;
+
+              // também preenche o select (fallback invisível)
+              ensureOpts(colorSel, list);
+
               list.forEach(function(c, idx){
-                var opt = document.createElement('option'); opt.value = c.id || String(idx); opt.textContent = c.label || ('Color '+(idx+1)); colorSelectHidden.appendChild(opt);
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'rc-color-pill' + (c.id === 'custom' ? ' is-custom' : '');
+                btn.setAttribute('role','option');
+                btn.setAttribute('aria-selected','false');
+                btn.setAttribute('data-id', c.id || String(idx));
+                btn.title = c.label;
 
-                var item = document.createElement('div');
-                item.className = 'rc-dd-item'; item.setAttribute('role','option');
-                item.setAttribute('data-id', c.id || String(idx)); item.setAttribute('aria-selected','false');
+                var sw = document.createElement('span');
+                sw.className = 'rc-swatch' + ((c.hex === '#ffffff' || c.hex === '#fff') ? ' is-white' : '');
+                if (c.hex) sw.style.background = c.hex;
 
-                var sw = document.createElement('span'); sw.className='rc-swatch'; if (c.hex) sw.style.background=c.hex;
-                var name = document.createElement('span'); name.textContent = c.label || ('Color '+(idx+1));
-                item.appendChild(sw); item.appendChild(name);
+                var label = document.createElement('span');
+                label.className = 'rc-color-label';
+                label.textContent = c.label;
 
-                item.addEventListener('click', function(){ selectColorById(c.id || String(idx)); closeColorMenu(); });
-                colorMenu.appendChild(item);
+                var extra = document.createElement('span');
+                extra.className = 'rc-color-extra';
+                if (typeof c.add === 'number' && c.add > 0) {
+                  extra.textContent = ' +$' + c.add.toFixed(2);
+                }
+
+                btn.appendChild(sw);
+                btn.appendChild(label);
+                if (extra.textContent) { btn.appendChild(document.createTextNode(' ')); btn.appendChild(extra); }
+
+                btn.addEventListener('click', function(){
+                  selectColorById(btn.getAttribute('data-id'));
+                });
+                btn.addEventListener('keydown', function(e){
+                  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectColorById(btn.getAttribute('data-id')); }
+                });
+
+                colorPills.appendChild(btn);
               });
             }
 
-            function selectColorById(id){
+            function selectColorById(id) {
               var list = state.options.colors || [];
-              var found = list.find(x => String(x.id||'')===String(id||'')) || list[0] || null;
+              var found = list.find(function(x){ return String(x.id||'') === String(id||''); }) || list[0] || null;
               state.selectedColor = found;
 
-              colorLabel.textContent = found ? (found.label || found.id) : 'Select a color';
-              colorSwatch.style.background = (found && found.hex) ? found.hex : '#fff';
-
-              Array.prototype.forEach.call(colorMenu.querySelectorAll('.rc-dd-item'), function(el){
+              Array.prototype.forEach.call(colorPills.querySelectorAll('.rc-color-pill'), function(el){
                 el.setAttribute('aria-selected', el.getAttribute('data-id') === String(found && found.id));
               });
 
-              if (found) colorSelectHidden.value = found.id;
+              if (colorSel && colorSel.options && colorSel.options.length) {
+                colorSel.value = found ? (found.id || colorSel.options[0].value) : colorSel.options[0].value;
+              }
+
               recompute();
             }
-            function toggleColorMenu(){
-              var expanded = colorBtn.getAttribute('aria-expanded') === 'true';
-              colorBtn.setAttribute('aria-expanded', String(!expanded));
-              colorMenu.setAttribute('aria-hidden', String(expanded));
-            }
-            function closeColorMenu(){ colorBtn.setAttribute('aria-expanded','false'); colorMenu.setAttribute('aria-hidden','true'); }
-            colorBtn.addEventListener('click', toggleColorMenu);
-            document.addEventListener('click', function(e){ if (!colorMenu.contains(e.target) && !colorBtn.contains(e.target)) closeColorMenu(); });
-            document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeColorMenu(); });
-
-            buildColorDropdown();
+            // init cores
+            renderColorPills();
             selectColorById((state.options.colors[0] && state.options.colors[0].id) || '');
-
-            /* ===== Neck Label (tipo + tiles) ===== */
-            function ensureOpts(sel,list){sel.innerHTML=''; if(!list.length){var o=document.createElement('option');o.value='';o.textContent='N/A'; sel.appendChild(o); sel.disabled=true; return;} sel.disabled=false; list.forEach((it,idx)=>{var o=document.createElement('option');o.value=it.id||String(idx);o.textContent=it.label||('Option '+(idx+1)); sel.appendChild(o);}); sel.value=list[0].id||sel.options[0].value;}
-            ensureOpts(neckSel, safeArray(cfg.options&&cfg.options.neckLabel));
-            function syncNeck(){
-              state.selectedNeck = (state.options.neckLabel || []).find(x=>String(x.id||'')===String(neckSel.value||'')) || (state.options.neckLabel||[])[0] || null;
-              // se "No label", limpamos size
-              if (!state.selectedNeck || state.selectedNeck.id === 'none') state.neckLabelSize = null;
-              highlightTiles();
-              recompute();
-            }
-            neckSel.addEventListener('change', syncNeck);
-            syncNeck();
-
-            var NECK_SIZES = [
-              { id:'50x18',  label:'50×18 mm', shape:'rect' },
-              { id:'60x20',  label:'60×20 mm', shape:'rect' },
-              { id:'65x15',  label:'65×15 mm', shape:'rect' },
-              { id:'45x45',  label:'45×45 mm', shape:'square' }
-            ];
-            function renderTiles(){
-              nlTiles.innerHTML='';
-              NECK_SIZES.forEach(function(sz){
-                var t=document.createElement('button');
-                t.type='button'; t.className='nl-tile'; t.setAttribute('data-id', sz.id);
-                var fig=document.createElement('div'); fig.className = (sz.shape==='square'?'nl-square':'nl-rect');
-                var cap=document.createElement('div'); cap.className='nl-label'; cap.textContent=sz.label;
-                t.appendChild(fig); t.appendChild(cap);
-                t.addEventListener('click', function(){
-                  // só permite escolher tamanho se tipo != none
-                  if (!state.selectedNeck || state.selectedNeck.id==='none') return;
-                  state.neckLabelSize = sz.label;
-                  highlightTiles();
-                });
-                nlTiles.appendChild(t);
-              });
-              highlightTiles();
-            }
-            function highlightTiles(){
-              var active = state.neckLabelSize;
-              var disabled = (!state.selectedNeck || state.selectedNeck.id==='none');
-              Array.prototype.forEach.call(nlTiles.querySelectorAll('.nl-tile'), function(b){
-                b.classList.toggle('nl-tile--active', b.querySelector('.nl-label').textContent===active);
-                b.style.opacity = disabled ? .5 : 1;
-                b.style.pointerEvents = disabled ? 'none' : 'auto';
-              });
-            }
-            renderTiles();
-
-            // header actions
-            nlCollapse.addEventListener('click', function(){
-              var isHidden = nlBody.classList.toggle('rc-hidden');
-              this.textContent = isHidden ? '+' : '−';
-            });
-            nlReset.addEventListener('click', function(){
-              // volta para "No label" e limpa tamanho
-              if (neckSel) neckSel.value = 'none';
-              state.selectedNeck = (state.options.neckLabel||[]).find(x=>x.id==='none') || null;
-              state.neckLabelSize = null;
-              highlightTiles();
-              recompute();
-            });
 
             function syncSel(){
               state.selectedArtwork=state.options.artwork.find(x=>String(x.id||'')===String(artSel.value||''))||state.options.artwork[0]||null;
-              // neck label is now handled by syncNeck function above
+              state.selectedNeck=state.options.neckLabel.find(x=>String(x.id||'')===String(neckSel.value||''))||state.options.neckLabel[0]||null;
             }
             syncSel();
             artSel.addEventListener('change',()=>{syncSel();recompute();});
@@ -1015,109 +859,31 @@
 
               return row;
             }
-            function createPuffRow(){
-              if (byId('emb-row-puff')) return byId('emb-row-puff');
-              var b = mkRowBase('emb-row-puff','Puff Print'), body=b.body, row=b.row, del=b.del;
-              var o1=mkSelect('Colors',['1 color','2 colors']);
-              var o2=mkSelect('Foam level',['Light','Standard','Heavy']);
-              var o3=mkSelect('Print size',['8x10','10x12','12x14']);
-              var opts=document.createElement('div'); opts.className='rc-opts'; opts.append(o1.wrap,o2.wrap,o3); body.appendChild(opts);
-              b.header.addEventListener('click', function(e){ if(e.target===del) return; toggleRow(row); });
-              del.addEventListener('click', function(){
-                delete state.embellishments.items['puff'];
-                state.embellishments.order = state.embellishments.order.filter(k=>k!=='puff');
-                row.remove(); renumberEmbRows(); recompute();
-              });
-              function sync(){ var it=state.embellishments.items['puff']||{}; it.puff_colors=o1.select.value; it.puff_level=o2.select.value; it.puff_size=o3.select.value; state.embellishments.items['puff']=it; recompute(); }
-              o1.select.addEventListener('change',sync); o2.select.addEventListener('change',sync); o3.select.addEventListener('change',sync);
-              return row;
-            }
-            function createDistressRow(){
-              if (byId('emb-row-distress')) return byId('emb-row-distress');
-              var b = mkRowBase('emb-row-distress','Distressing'), body=b.body, row=b.row, del=b.del;
-              var o1=mkSelect('Level',['Light','Medium','Heavy']);
-              var o2=mkSelect('Areas',['Edges','All-over','Specific']);
-              var opts=document.createElement('div'); opts.className='rc-opts'; opts.append(o1.wrap,o2.wrap); body.appendChild(opts);
-              b.header.addEventListener('click', function(e){ if(e.target===del) return; toggleRow(row); });
-              del.addEventListener('click', function(){
-                delete state.embellishments.items['distress'];
-                state.embellishments.order = state.embellishments.order.filter(k=>k!=='distress');
-                row.remove(); renumberEmbRows(); recompute();
-              });
-              function sync(){ var it=state.embellishments.items['distress']||{}; it.distress_level=o1.select.value; it.distress_areas=o2.select.value; state.embellishments.items['distress']=it; recompute(); }
-              o1.select.addEventListener('change',sync); o2.select.addEventListener('change',sync);
-              return row;
-            }
-            function createLabelsRow(){
-              if (byId('emb-row-labels')) return byId('emb-row-labels');
-              var b = mkRowBase('emb-row-labels','Custom Labels'), body=b.body, row=b.row, del=b.del;
-              var o1=mkSelect('Type',['Woven','Printed','Satin']);
-              var o2=mkSelect('Method',['Sew-on','Heat transfer']);
-              var opts=document.createElement('div'); opts.className='rc-opts'; opts.append(o1.wrap,o2.wrap); body.appendChild(opts);
-              b.header.addEventListener('click', function(e){ if(e.target===del) return; toggleRow(row); });
-              del.addEventListener('click', function(){
-                delete state.embellishments.items['labels'];
-                state.embellishments.order = state.embellishments.order.filter(k=>k!=='labels');
-                row.remove(); renumberEmbRows(); recompute();
-              });
-              function sync(){ var it=state.embellishments.items['labels']||{}; it.label_type=o1.select.value; it.label_method=o2.select.value; state.embellishments.items['labels']=it; recompute(); }
-              o1.select.addEventListener('change',sync); o2.select.addEventListener('change',sync);
-              return row;
-            }
-            function createDyeRow(){
-              if (byId('emb-row-dye')) return byId('emb-row-dye');
-              var b = mkRowBase('emb-row-dye','Custom Dye'), body=b.body, row=b.row, del=b.del;
-              var o1=mkSelect('Type',['Garment Dye','Crystal Wash','Acid Wash','Pigment Dye']);
-              var o2=mkSelect('Intensity',['Light','Standard','Deep']);
-              var opts=document.createElement('div'); opts.className='rc-opts'; opts.append(o1.wrap,o2.wrap); body.appendChild(opts);
-              b.header.addEventListener('click', function(e){ if(e.target===del) return; toggleRow(row); });
-              del.addEventListener('click', function(){
-                delete state.embellishments.items['dye'];
-                state.embellishments.order = state.embellishments.order.filter(k=>k!=='dye');
-                row.remove(); renumberEmbRows(); recompute();
-              });
-              function sync(){ var it=state.embellishments.items['dye']||{}; it.dye_type=o1.select.value; it.dye_intensity=o2.select.value; state.embellishments.items['dye']=it; recompute(); }
-              o1.select.addEventListener('change',sync); o2.select.addEventListener('change',sync);
-              return row;
-            }
-
-            /* helpers para rows */
-            function mkSelect(label, optionsArr){
-              var wrap=document.createElement('div'); wrap.className='rc-opt';
-              var l=document.createElement('label'); l.textContent=label;
-              var sw=document.createElement('div'); sw.className='rc-select-wrap';
-              var s=document.createElement('select'); optionsArr.forEach(t=>s.add(new Option(t,t)));
-              sw.appendChild(s); wrap.appendChild(l); wrap.appendChild(sw);
-              return {wrap, select:s};
-            }
-            function mkRowBase(id, title){
-              var row=document.createElement('div'); row.className='rc-emb-row'; row.id=id;
-              var header=document.createElement('div'); header.className='rc-emb-header';
-              header.innerHTML='<span class="rc-emb-num">1.</span><span class="rc-emb-name">'+title+'</span>';
-              var del=document.createElement('button'); del.type='button'; del.className='rc-emb-delete'; del.textContent='✕'; del.setAttribute('aria-label','Remove '+title); header.appendChild(del);
-              var body=document.createElement('div'); body.className='rc-emb-body';
-              row.append(header, body);
-              return {row, header, body, del};
-            }
-
-            function attachPill(btnId, key, createRowFn, defaultItem){
-              byId(btnId).addEventListener('click', function(){
-                if (state.embellishments.items[key]) {
-                  var row = document.getElementById('emb-row-'+key); if (row) { row.classList.remove('rc-collapsed'); row.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+            function addOrToggle(method){
+              if (method === 'screenprint') {
+                if (state.embellishments.items['screenprint']) {
+                  var row = byId('emb-row-screenprint'); if (row) toggleRow(row);
                   return;
                 }
-                var row = createRowFn(); document.getElementById('rc-embellishments-list').appendChild(row);
-                state.embellishments.order.push(key);
-                state.embellishments.items[key] = Object.assign({}, defaultItem || {});
+                var row = createScreenPrintRow();
+                embList.appendChild(row);
+                state.embellishments.order.push('screenprint');
+                state.embellishments.items['screenprint'] = { sp_colors:'1 color', sp_size:'8x10', sp_extras:'None (Plastisol)' };
                 renumberEmbRows(); recompute();
-              });
+              } else if (method === 'embroidery') {
+                if (state.embellishments.items['embroidery']) {
+                  var row2 = byId('emb-row-embroidery'); if (row2) toggleRow(row2);
+                  return;
+                }
+                var row2 = createEmbroideryRow();
+                embList.appendChild(row2);
+                state.embellishments.order.push('embroidery');
+                state.embellishments.items['embroidery'] = { emb_colors:'1-3 colors', emb_area:'25cm2', emb_3d:false };
+                renumberEmbRows(); recompute();
+              }
             }
-            attachPill('btn-add-screenprint', 'screenprint', createScreenPrintRow, { sp_colors:'1 color', sp_size:'8x10', sp_extras:'None (Plastisol)' });
-            attachPill('btn-add-embroidery',  'embroidery',  createEmbroideryRow,  { emb_colors:'1-3 colors', emb_area:'25cm2', emb_3d:false });
-            attachPill('btn-add-puff',        'puff',        createPuffRow,        { puff_colors:'1 color', puff_level:'Standard', puff_size:'8x10' });
-            attachPill('btn-add-distress',    'distress',    createDistressRow,    { distress_level:'Light', distress_areas:'Edges' });
-            attachPill('btn-add-labels',      'labels',      createLabelsRow,      { label_type:'Woven', label_method:'Sew-on' });
-            attachPill('btn-add-dye',         'dye',         createDyeRow,         { dye_type:'Garment Dye', dye_intensity:'Standard' });
+            byId('btn-add-screenprint').addEventListener('click', function(){ addOrToggle('screenprint'); });
+            byId('btn-add-embroidery').addEventListener('click', function(){ addOrToggle('embroidery'); });
 
             function setForm(n,v){var el=form.querySelector('input[name="'+n+'"]'); if(el) el.value=v;}
             function serializeOptions(){
@@ -1125,7 +891,6 @@
                 color:state.selectedColor?{id:state.selectedColor.id,label:state.selectedColor.label}:null,
                 artwork:state.selectedArtwork?{id:state.selectedArtwork.id,label:state.selectedArtwork.label,addPerUnit:toNumber(state.selectedArtwork.addPerUnit,0)}:null,
                 neckLabel:state.selectedNeck?{id:state.selectedNeck.id,label:state.selectedNeck.label,addPerUnit:toNumber(state.selectedNeck.addPerUnit,0)}:null,
-                neckLabelSize: state.neckLabelSize || null,
                 embellishments:getEmbPayload()
               };
             }
@@ -1156,7 +921,7 @@
             function getEmailSubject(n){return (state.cta.emailSubject||'Quote request').replace('{{productName}}',n||'');}
             function buildEmailBody(calc,fmt){
               var lines=[]; lines.push('Product: '+calc.productName+' ('+calc.productId+')'); lines.push('Quantity: '+calc.qty);
-              var o=calc.options||{}; if(o.color)lines.push('Color: '+(o.color.label||o.color.id)); if(o.artwork)lines.push('Artwork: '+(o.artwork.label||o.artwork.id)); if(o.neckLabel)lines.push('Neck Label: '+(o.neckLabel.label||o.neckLabel.id)); if (o.neckLabelSize) lines.push('Neck label size: '+o.neckLabelSize);
+              var o=calc.options||{}; if(o.color)lines.push('Color: '+(o.color.label||o.color.id)); if(o.artwork)lines.push('Artwork: '+(o.artwork.label||o.artwork.id)); if(o.neckLabel)lines.push('Neck Label: '+(o.neckLabel.label||o.neckLabel.id));
               lines.push(''); lines.push('Unit cost: '+fmt(calc.unitCost)); lines.push('Subtotal: '+fmt(calc.subtotal)); lines.push('Lead time: '+calc.leadTimeDays+' days'); lines.push('Estimated delivery: '+calc.deliveryDate);
               lines.push(''); lines.push('Currency: '+state.currency); return lines.join('%0A');
             }
@@ -1177,7 +942,6 @@
                 if(state.selectedColor&&state.selectedColor.id) q.set('color',state.selectedColor.id);
                 if(state.selectedArtwork&&state.selectedArtwork.id) q.set('artwork',state.selectedArtwork.id);
                 if(state.selectedNeck&&state.selectedNeck.id) q.set('neckLabel',state.selectedNeck.id);
-                if(state.neckLabelSize) q.set('neckLabelSize', state.neckLabelSize);
                 var j=url.indexOf('?')===-1?'?':'&'; try{window.location.href=url+j+q.toString();}catch(e){window.location.assign(url);}
               }
             });
