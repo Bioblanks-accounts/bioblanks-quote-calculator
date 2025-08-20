@@ -357,22 +357,45 @@
         #quote-calc .nl-tile {
           border-radius: 14px;
           border: 1px solid var(--rc-border);
-          background: #f3f4f6;
+          background: #A3A39D;
+          color: #A3A39D;
           padding: 14px 12px;
           display:flex; flex-direction:column; align-items:center; gap:10px;
           cursor:pointer;
-          transition: box-shadow .15s ease, background .15s ease, border-color .15s ease;
+          transition: box-shadow .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
         }
-        #quote-calc .nl-tile:hover { background:#eef0f3; }
+        #quote-calc .nl-tile:hover { 
+          background: #909089; 
+          color: #909089;
+        }
         #quote-calc .nl-tile--active {
-          background:#fff; border-color:#111827; box-shadow: 0 0 0 2px #1118270f;
+          background: #A3A39D !important; 
+          color: #ffffff !important; 
+          border-color: #A3A39D; 
+          box-shadow: 0 0 0 2px rgba(163, 163, 157, 0.3);
         }
         #quote-calc .nl-rect {
           width: 56px; height: 32px; border-radius:6px;
-          background:#fff; border:2px dashed #111; /* desenho simplificado do retângulo */
+          background:#fff; border:2px dashed currentColor; 
+          transition: border-color .15s ease;
         }
-        #quote-calc .nl-square { width: 36px; height: 36px; border-radius:6px; background:#fff; border:2px dashed #111; }
-        #quote-calc .nl-label { font-size: 13px; color:#374151; }
+        #quote-calc .nl-square { 
+          width: 36px; height: 36px; border-radius:6px; 
+          background:#fff; border:2px dashed currentColor; 
+          transition: border-color .15s ease;
+        }
+        #quote-calc .nl-label { 
+          font-size: 13px; 
+          color: inherit;
+          font-weight: 500;
+          transition: color .15s ease;
+        }
+        #quote-calc .nl-tile--active .nl-rect,
+        #quote-calc .nl-tile--active .nl-square {
+          border-color: #ffffff;
+          border-style: solid;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
       </style>
 
       <!-- JSON (USD) -->
@@ -503,15 +526,50 @@
         ],
         "options": {
           "colors": [
-            { "id": "white",        "label": "White",        "hex": "#ffffff", "add": 0   },
-            { "id": "white-rtd",    "label": "White RTD",    "hex": "#f7f7f7", "add": 0   },
-            { "id": "black",        "label": "Black",        "hex": "#0f0f10", "add": 0   },
-            { "id": "heather-grey", "label": "Heather Grey", "hex": "#c8c9cb", "add": 0   },
-            { "id": "custom",       "label": "Custom Color", "hex": null,      "add": 0.4 }
-          ],
-          "artwork": [
-            { "id": "none", "label": "No artwork", "addPerUnit": 0 },
-            { "id": "front-1c", "label": "Front 1-color", "addPerUnit": 0.6 }
+            { "id": "White", "label": "White", "hex": "#FFFFFF", "add": 0 },
+            { "id": "Merlot", "label": "Merlot", "hex": "#73272D", "add": 0 },
+            { "id": "Adrenaline Rush", "label": "Adrenaline Rush", "hex": "#B31A23", "add": 0 },
+            { "id": "Fiery Red", "label": "Fiery Red", "hex": "#D01C1F", "add": 0 },
+            { "id": "Hot Coral", "label": "Hot Coral", "hex": "#F35B54", "add": 0 },
+            { "id": "Cactus Flower", "label": "Cactus Flower", "hex": "#A83E6C", "add": 0 },
+            { "id": "Sachet Pink", "label": "Sachet Pink", "hex": "#F1A8AD", "add": 0 },
+            { "id": "Nosegay", "label": "Nosegay", "hex": "#F0BDD5", "add": 0 },
+            { "id": "Peachskin", "label": "Peachskin", "hex": "#DFB8B6", "add": 0 },
+            { "id": "Pink Marshmallow", "label": "Pink Marshmallow", "hex": "#F8E0E8", "add": 0 },
+            { "id": "Mountain View", "label": "Mountain View", "hex": "#2E3D30", "add": 0 },
+            { "id": "Courtyard", "label": "Courtyard", "hex": "#3E5E32", "add": 0 },
+            { "id": "Verdant Green", "label": "Verdant Green", "hex": "#12674A", "add": 0 },
+            { "id": "Canary Green", "label": "Canary Green", "hex": "#D6DFC9", "add": 0 },
+            { "id": "Amber Gold", "label": "Amber Gold", "hex": "#C19552", "add": 0 },
+            { "id": "Lemon Curry", "label": "Lemon Curry", "hex": "#CDA323", "add": 0 },
+            { "id": "Super Lemon", "label": "Super Lemon", "hex": "#E4BF45", "add": 0 },
+            { "id": "Pastel Yellow", "label": "Pastel Yellow", "hex": "#F2E6B1", "add": 0 },
+            { "id": "Graystone", "label": "Graystone", "hex": "#4D495B", "add": 0 },
+            { "id": "Acai", "label": "Acai", "hex": "#46295A", "add": 0 },
+            { "id": "Pansy", "label": "Pansy", "hex": "#653D7C", "add": 0 },
+            { "id": "Lavender", "label": "Lavender", "hex": "#AFA4CE", "add": 0 },
+            { "id": "Lavender Fog", "label": "Lavender Fog", "hex": "#D2C4D6", "add": 0 },
+            { "id": "Black Beauty", "label": "Black Beauty", "hex": "#27272A", "add": 0 },
+            { "id": "Pirate Black", "label": "Pirate Black", "hex": "#373838", "add": 0 },
+            { "id": "Gray Contours", "label": "Gray Contours", "hex": "#827F7F", "add": 0 },
+            { "id": "Antarctica", "label": "Antarctica", "hex": "#C6C6C7", "add": 0 },
+            { "id": "Sahara Sun", "label": "Sahara Sun", "hex": "#DFC08A", "add": 0 },
+            { "id": "Pebble", "label": "Pebble", "hex": "#CAB698", "add": 0 },
+            { "id": "Parchment", "label": "Parchment", "hex": "#D9CDBA", "add": 0 },
+            { "id": "Papyrus", "label": "Papyrus", "hex": "#F5EDD6", "add": 0 },
+            { "id": "Marshmallow", "label": "Marshmallow", "hex": "#F0EEE4", "add": 0 },
+            { "id": "Poseidon", "label": "Poseidon", "hex": "#133955", "add": 0 },
+            { "id": "True Blue", "label": "True Blue", "hex": "#1F4477", "add": 0 },
+            { "id": "Parisian Blue", "label": "Parisian Blue", "hex": "#4F7CA4", "add": 0 },
+            { "id": "Ice Melt", "label": "Ice Melt", "hex": "#D3E4F1", "add": 0 },
+            { "id": "Brandy Brown", "label": "Brandy Brown", "hex": "#73362A", "add": 0 },
+            { "id": "Rust", "label": "Rust", "hex": "#B55A30", "add": 0 },
+            { "id": "Dusty Orange", "label": "Dusty Orange", "hex": "#E27A53", "add": 0 },
+            { "id": "Flax", "label": "Flax", "hex": "#FFC87D", "add": 0 },
+            { "id": "Potting Soil", "label": "Potting Soil", "hex": "#54392D", "add": 0 },
+            { "id": "Cumin", "label": "Cumin", "hex": "#927240", "add": 0 },
+            { "id": "Thai Curry", "label": "Thai Curry", "hex": "#AC681A", "add": 0 },
+            { "id": "Butterum", "label": "Butterum", "hex": "#C68F65", "add": 0 }
           ],
           "neckLabel": [
             { "id": "none", "label": "No label", "addPerUnit": 0 },
@@ -562,12 +620,8 @@
               <select id="color-select" name="color" class="rc-hidden" aria-hidden="true"></select>
             </div>
 
-            <div class="rc-opt">
-              <label for="artwork-select">Artwork</label>
-              <div class="rc-select-wrap"><select id="artwork-select" name="artwork"></select></div>
-            </div>
-
-            <!-- Espaço "vazio" para manter a grade 3 colunas no desktop -->
+            <!-- Espaços "vazios" para manter a grade 3 colunas no desktop -->
+            <div class="rc-opt rc-hidden" aria-hidden="true"></div>
             <div class="rc-opt rc-hidden" aria-hidden="true"></div>
           </div>
 
@@ -575,12 +629,10 @@
           <div class="rc-emb-block" aria-labelledby="rc-embellishments-label">
             <label id="rc-embellishments-label">Embellishments</label>
             <div class="rc-emb-pills">
-              <button type="button" id="btn-add-screenprint" class="rc-pill-btn">Add Screen Print</button>
-              <button type="button" id="btn-add-embroidery" class="rc-pill-btn">Add Embroidery</button>
+              <button type="button" id="btn-add-screenprint" class="rc-pill-btn">Screenprint</button>
               <button type="button" id="btn-add-puff" class="rc-pill-btn">Puff Print</button>
-              <button type="button" id="btn-add-distress" class="rc-pill-btn">Add Distressing</button>
-              <button type="button" id="btn-add-labels" class="rc-pill-btn">Custom Labels</button>
-              <button type="button" id="btn-add-dye" class="rc-pill-btn">Custom Dye</button>
+              <button type="button" id="btn-add-embroidery" class="rc-pill-btn">Embroidery</button>
+              <button type="button" id="btn-add-patches" class="rc-pill-btn">Patches</button>
             </div>
             <div id="rc-embellishments-list" class="rc-emb-list"></div>
           </div>
@@ -706,7 +758,7 @@
             var colorSelectHidden=byId('color-select');
             var colorBtn=byId('color-dd-btn'), colorMenu=byId('color-dd-menu'), colorLabel=byId('color-dd-label'), colorSwatch=byId('color-dd-swatch');
 
-            var artSel=byId('artwork-select'), neckSel=byId('neck-select');
+            var neckSel=byId('neck-select');
             var nlTiles=byId('nl-tiles'), nlBody=byId('nl-body'), nlCollapse=byId('nl-collapse'), nlReset=byId('nl-reset');
             var qtyInput=byId('qty-input'), qtyRange=byId('qty-range'), qtyInc=byId('qty-inc'), qtyDec=byId('qty-dec');
             var lead=byId('lead-time-value'), unit=byId('unit-cost-value'), sub=byId('subtotal-value'), delivery=byId('delivery-date-value');
@@ -723,7 +775,7 @@
               limits:limits,
               currency:currency,
               cta:Object.assign({startDesignUrl:'#',emailSubject:'Quote request – {{productName}}',emailTo:''},cfg.cta||{}),
-              selectedColor:null, selectedArtwork:null, selectedNeck:null,
+              selectedColor:null, selectedNeck:null,
               neckLabelSize:null,          // string do tile selecionado
               embellishments:{ order:[], items:{} }
             };
@@ -850,13 +902,8 @@
               recompute();
             });
 
-            function syncSel(){
-              state.selectedArtwork=state.options.artwork.find(x=>String(x.id||'')===String(artSel.value||''))||state.options.artwork[0]||null;
-              // neck label is now handled by syncNeck function above
-            }
-            syncSel();
-            artSel.addEventListener('change',()=>{syncSel();recompute();});
-            neckSel.addEventListener('change',()=>{syncSel();recompute();});
+            // artwork removed
+            // removed artwork event listener
 
             // qty
             qtyInput.min=String(state.limits.minQty); qtyInput.max=String(state.limits.maxQty); qtyInput.step=String(state.limits.qtyStep); qtyInput.value=String(state.qty);
@@ -1080,6 +1127,23 @@
               o1.select.addEventListener('change',sync); o2.select.addEventListener('change',sync);
               return row;
             }
+            function createPatchesRow(){
+              if (byId('emb-row-patches')) return byId('emb-row-patches');
+              var b = mkRowBase('emb-row-patches','Patches'), body=b.body, row=b.row, del=b.del;
+              var o1=mkSelect('Type',['Woven','Embroidered','PVC','Leather']);
+              var o2=mkSelect('Size',['2x2','3x3','4x4','Custom']);
+              var o3=mkSelect('Colors',['1 color','2 colors','Full color']);
+              var opts=document.createElement('div'); opts.className='rc-opts'; opts.append(o1.wrap,o2.wrap,o3); body.appendChild(opts);
+              b.header.addEventListener('click', function(e){ if(e.target===del) return; toggleRow(row); });
+              del.addEventListener('click', function(){
+                delete state.embellishments.items['patches'];
+                state.embellishments.order = state.embellishments.order.filter(k=>k!=='patches');
+                row.remove(); renumberEmbRows(); recompute();
+              });
+              function sync(){ var it=state.embellishments.items['patches']||{}; it.patch_type=o1.select.value; it.patch_size=o2.select.value; it.patch_colors=o3.select.value; state.embellishments.items['patches']=it; recompute(); }
+              o1.select.addEventListener('change',sync); o2.select.addEventListener('change',sync); o3.select.addEventListener('change',sync);
+              return row;
+            }
 
             /* helpers para rows */
             function mkSelect(label, optionsArr){
@@ -1094,7 +1158,9 @@
               var row=document.createElement('div'); row.className='rc-emb-row'; row.id=id;
               var header=document.createElement('div'); header.className='rc-emb-header';
               header.innerHTML='<span class="rc-emb-num">1.</span><span class="rc-emb-name">'+title+'</span>';
-              var del=document.createElement('button'); del.type='button'; del.className='rc-emb-delete'; del.textContent='✕'; del.setAttribute('aria-label','Remove '+title); header.appendChild(del);
+              var del=document.createElement('button'); del.type='button'; del.className='rc-emb-delete'; 
+              del.innerHTML='<svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px;"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>'; 
+              del.setAttribute('aria-label','Remove '+title); header.appendChild(del);
               var body=document.createElement('div'); body.className='rc-emb-body';
               row.append(header, body);
               return {row, header, body, del};
@@ -1113,17 +1179,14 @@
               });
             }
             attachPill('btn-add-screenprint', 'screenprint', createScreenPrintRow, { sp_colors:'1 color', sp_size:'8x10', sp_extras:'None (Plastisol)' });
-            attachPill('btn-add-embroidery',  'embroidery',  createEmbroideryRow,  { emb_colors:'1-3 colors', emb_area:'25cm2', emb_3d:false });
             attachPill('btn-add-puff',        'puff',        createPuffRow,        { puff_colors:'1 color', puff_level:'Standard', puff_size:'8x10' });
-            attachPill('btn-add-distress',    'distress',    createDistressRow,    { distress_level:'Light', distress_areas:'Edges' });
-            attachPill('btn-add-labels',      'labels',      createLabelsRow,      { label_type:'Woven', label_method:'Sew-on' });
-            attachPill('btn-add-dye',         'dye',         createDyeRow,         { dye_type:'Garment Dye', dye_intensity:'Standard' });
+            attachPill('btn-add-embroidery',  'embroidery',  createEmbroideryRow,  { emb_colors:'1-3 colors', emb_area:'25cm2', emb_3d:false });
+            attachPill('btn-add-patches',     'patches',     createPatchesRow,     { patch_type:'Woven', patch_size:'2x2', patch_colors:'1 color' });
 
             function setForm(n,v){var el=form.querySelector('input[name="'+n+'"]'); if(el) el.value=v;}
             function serializeOptions(){
               return {
                 color:state.selectedColor?{id:state.selectedColor.id,label:state.selectedColor.label}:null,
-                artwork:state.selectedArtwork?{id:state.selectedArtwork.id,label:state.selectedArtwork.label,addPerUnit:toNumber(state.selectedArtwork.addPerUnit,0)}:null,
                 neckLabel:state.selectedNeck?{id:state.selectedNeck.id,label:state.selectedNeck.label,addPerUnit:toNumber(state.selectedNeck.addPerUnit,0)}:null,
                 neckLabelSize: state.neckLabelSize || null,
                 embellishments:getEmbPayload()
@@ -1133,7 +1196,7 @@
             function recompute(){
               var p=state.product||{}, qty=state.qty;
               var base=getPriceUnitForQty(safeArray(p.priceBreaks),qty);
-              var add=0; if(state.selectedArtwork) add+=toNumber(state.selectedArtwork.addPerUnit,0);
+              var add=0;
               if(state.selectedNeck) add+=toNumber(state.selectedNeck.addPerUnit,0);
               if(state.selectedColor&&typeof state.selectedColor.add!=='undefined') add+=toNumber(state.selectedColor.add,0);
               var unitCost=base+add;
@@ -1156,7 +1219,7 @@
             function getEmailSubject(n){return (state.cta.emailSubject||'Quote request').replace('{{productName}}',n||'');}
             function buildEmailBody(calc,fmt){
               var lines=[]; lines.push('Product: '+calc.productName+' ('+calc.productId+')'); lines.push('Quantity: '+calc.qty);
-              var o=calc.options||{}; if(o.color)lines.push('Color: '+(o.color.label||o.color.id)); if(o.artwork)lines.push('Artwork: '+(o.artwork.label||o.artwork.id)); if(o.neckLabel)lines.push('Neck Label: '+(o.neckLabel.label||o.neckLabel.id)); if (o.neckLabelSize) lines.push('Neck label size: '+o.neckLabelSize);
+              var o=calc.options||{}; if(o.color)lines.push('Color: '+(o.color.label||o.color.id)); if(o.neckLabel)lines.push('Neck Label: '+(o.neckLabel.label||o.neckLabel.id)); if (o.neckLabelSize) lines.push('Neck label size: '+o.neckLabelSize);
               lines.push(''); lines.push('Unit cost: '+fmt(calc.unitCost)); lines.push('Subtotal: '+fmt(calc.subtotal)); lines.push('Lead time: '+calc.leadTimeDays+' days'); lines.push('Estimated delivery: '+calc.deliveryDate);
               lines.push(''); lines.push('Currency: '+state.currency); return lines.join('%0A');
             }
@@ -1165,7 +1228,7 @@
               if(form.requestSubmit) form.requestSubmit(); else if(form.submit) form.submit();
               var p=state.product||{}, qty=state.qty;
               var base=getPriceUnitForQty(safeArray(p.priceBreaks),qty);
-              var add=0; if(state.selectedArtwork) add+=toNumber(state.selectedArtwork.addPerUnit,0); if(state.selectedNeck) add+=toNumber(state.selectedNeck.addPerUnit,0); if(state.selectedColor&&typeof state.selectedColor.add!=='undefined') add+=toNumber(state.selectedColor.add,0);
+              var add=0; if(state.selectedNeck) add+=toNumber(state.selectedNeck.addPerUnit,0); if(state.selectedColor&&typeof state.selectedColor.add!=='undefined') add+=toNumber(state.selectedColor.add,0);
               var unitCost=base+add; var subtotal=unitCost*qty; var leadDays=getLeadTimeDays(state.leadTimeRules,qty); var deliveryDate=addBusinessDaysExclusive(new Date(),leadDays);
               var subject=encodeURIComponent(getEmailSubject(p.name||'')); var body=buildEmailBody({productId:p.id||'',productName:p.name||'',qty:qty,unitCost:unitCost,subtotal:subtotal,leadTimeDays:leadDays,deliveryDate:formatMMDDYYYY(deliveryDate),options:serializeOptions()}, makeMoneyFormatter(state.currency)); var to=(state.cta.emailTo||'').trim(); var href='mailto:'+encodeURIComponent(to)+'?subject='+subject+'&body='+body; window.open(href,'_blank');
             });
@@ -1175,7 +1238,7 @@
                 if(state.product&&state.product.id) q.set('productId',state.product.id);
                 q.set('qty',String(state.qty));
                 if(state.selectedColor&&state.selectedColor.id) q.set('color',state.selectedColor.id);
-                if(state.selectedArtwork&&state.selectedArtwork.id) q.set('artwork',state.selectedArtwork.id);
+                // artwork removed
                 if(state.selectedNeck&&state.selectedNeck.id) q.set('neckLabel',state.selectedNeck.id);
                 if(state.neckLabelSize) q.set('neckLabelSize', state.neckLabelSize);
                 var j=url.indexOf('?')===-1?'?':'&'; try{window.location.href=url+j+q.toString();}catch(e){window.location.assign(url);}
