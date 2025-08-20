@@ -769,7 +769,7 @@
             var state={
               products:products,
               product:products[0]||null,
-              options:{colors:safeArray(cfg.options&&cfg.options.colors),artwork:safeArray(cfg.options&&cfg.options.artwork),neckLabel:safeArray(cfg.options&&cfg.options.neckLabel)},
+              options:{colors:safeArray(cfg.options&&cfg.options.colors),neckLabel:safeArray(cfg.options&&cfg.options.neckLabel)},
               leadTimeRules:safeArray(cfg.leadTimeRules),
               qty:clamp(toNumber(limits.minQty,1),toNumber(limits.minQty,1),toNumber(limits.maxQty,1000)),
               limits:limits,
@@ -788,8 +788,7 @@
             productSelect.addEventListener('change',function(){ var v=this.value; var found=state.products.find((p,idx)=> (p.id&&p.id===v)||(!p.id&&String(idx)===v)); state.product=found||state.products[0]; renderProduct(state.product); recompute(); });
 
             function ensureOpts(sel,list){sel.innerHTML=''; if(!list.length){var o=document.createElement('option');o.value='';o.textContent='N/A'; sel.appendChild(o); sel.disabled=true; return;} sel.disabled=false; list.forEach((it,idx)=>{var o=document.createElement('option');o.value=it.id||String(idx);o.textContent=it.label||('Option '+(idx+1)); sel.appendChild(o);}); sel.value=list[0].id||sel.options[0].value;}
-            // artwork & neck via select
-            ensureOpts(artSel,state.options.artwork);
+            // neck via select (artwork removed)
             ensureOpts(neckSel,state.options.neckLabel);
 
             // ========== Color Pills ==========
